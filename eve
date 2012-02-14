@@ -97,10 +97,12 @@ Written by Simon Josefsson."
 	esac
     done
 
-    if test -z "$@"; then
+    if test $# -eq 0; then
 	usage
 	exit 0
     fi
+
+    export EVE_VERBOSE
 }
 
 cmd="$1"
