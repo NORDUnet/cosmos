@@ -23,4 +23,4 @@ install:
 	install -D --mode 644 eve $(DESTDIR)$(bindir)/eve
 
 check:
-	checkbashisms eve
+	checkbashisms eve overlay.d/*
