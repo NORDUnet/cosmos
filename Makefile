@@ -21,3 +21,6 @@ all:
 install:
 	install -D --backup --mode 640 eve.conf $(DESTDIR)$(etcprefix)/eve.conf
 	install -D --mode 644 eve $(DESTDIR)$(bindir)/eve
+
+check:
+	checkbashisms eve
