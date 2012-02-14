@@ -19,18 +19,23 @@ set -e
 usage ()
 {
     echo "\
-Usage: eve [OPTION] overlay
-       eve [OPTION] delete
-       eve [OPTION] tasks
+Usage: eve [OPTION...] COMMAND [COMMAND-OPTION...]
 
 Eve is meant for system administrators who wants to centralize and
 automate system configuration and package installation.
+
+The COMMAND specify the action sequence performed by the tool.
+Currently COMMAND may be 'overlay', 'delete', or 'tasks'.
 
 Common options:
 
   -h, --help                show this help text.
   -V, --version             show version information.
   -v, --verbose             Increase verbosity.
+
+Parameters to 'overlay', 'delete', and 'tasks' commands:
+
+  -n, --dry-run             do nothing except print what should be done
 
 Report bugs to <sysadmin@yubico.com>." 1>&2
 }
@@ -68,6 +73,9 @@ Written by Simon Josefsson."
 
     while test $# -gt 0; do
 	case "$1" in
+	    --dry-run | -n)
+		dryrun=y
+		shift ;;
 	    --verbose | -v)
 		verbose=y
 		shift ;;
