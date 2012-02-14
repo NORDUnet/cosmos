@@ -53,10 +53,12 @@ Written by Simon Josefsson."
 	EVE_CONF_DIR=/etc/eve
     fi
 
-    conf="$EVE_CONF_DIR/eve.conf"
+    EVE_CONF="$EVE_CONF_DIR/eve.conf"
 
-    if test -e $conf; then
-	. $conf
+    if test -e $EVE_CONF; then
+	set -a
+	. $EVE_CONF
+	set +a
     fi
 }
 
@@ -105,15 +107,16 @@ if ! test -d "$dir"; then
     exit 1
 fi
 
-test -z $verbose || echo "Using $dir for parts"
+parts=$(find $dir/ -mindepth 1 -maxdepth 1 \
+    -type f -executable \! -name \*~ | sort -n)
 
-parts=$(
-    for f in `ls $dir`; do
-	if ! test -d "$dir/$f" && test -x "$dir/$f"; then
-	    echo $dir/$f
-	fi
-    done
-)
+if test -z "$parts"; then
+    echo "eve: command '$cmd' does not do anything" 1>&2
+    echo "Try 'eve --help' for more information." 1>&2
+    exit 1
+fi
+
+test -z $verbose || echo "Enumerating $dir parts as $parts"
 
 for part in "$parts"; do
     test -z $verbose || echo "Invoking $part $@"
