@@ -1,0 +1,123 @@
+#!/bin/sh
+set -e
+
+# Copyright (C) 2012 Simon Josefsson
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+usage ()
+{
+    echo "\
+Usage: eve [OPTION] overlay
+       eve [OPTION] delete
+       eve [OPTION] tasks
+
+Eve is meant for system administrators who wants to centralize and
+automate system configuration and package installation.
+
+Common options:
+
+  -h, --help                show this help text.
+  -V, --version             show version information.
+  -v, --verbose             Increase verbosity.
+
+Report bugs to <sysadmin@yubico.com>." 1>&2
+}
+
+version ()
+{
+    echo "\
+eve (Eve) 1.0
+Copyright (C) 2012 Simon Josefsson
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Simon Josefsson."
+}
+
+# Read configuration file.
+{
+    if test -z "$EVE_CONF_DIR"; then
+	EVE_CONF_DIR=/etc/eve
+    fi
+
+    conf="$EVE_CONF_DIR/eve.conf"
+
+    if test -e $conf; then
+	. $conf
+    fi
+}
+
+# Command line parsing.
+{
+    verbose=
+
+    while test $# -gt 0; do
+	case "$1" in
+	    --verbose | -v)
+		verbose=y
+		shift ;;
+	    --help | -h )
+		usage
+		exit 0 ;;
+	    --version | -V )
+		version
+		exit 0 ;;
+	    -- )
+        # Stop option processing
+		shift
+		break ;;
+	    -* )
+		echo "eve: unknown option $1" 1>&2
+		echo "Try 'eve --help' for more information." 1>&2
+		exit 1 ;;
+	    * )
+		break ;;
+	esac
+    done
+
+    if test -z "$@"; then
+	usage
+	exit 0
+    fi
+}
+
+cmd="$1"
+shift
+
+dir="$EVE_CONF_DIR/$cmd.d"
+
+if ! test -d "$dir"; then
+    echo "eve: unknown command '$cmd'" 1>&2
+    echo "Try 'eve --help' for more information." 1>&2
+    exit 1
+fi
+
+test -z $verbose || echo "Using $dir for parts"
+
+parts=$(
+    for f in `ls $dir`; do
+	if ! test -d "$dir/$f" && test -x "$dir/$f"; then
+	    echo $dir/$f
+	fi
+    done
+)
+
+for part in "$parts"; do
+    test -z $verbose || echo "Invoking $part $@"
+    "$part" "$@"
+done
+
+exit 0
