@@ -17,7 +17,11 @@ set -e
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 MODEL_OVERLAY=$EVE_MODEL/overlay.d
-RSYNC_ARGS="$@"
+if test -n "$EVE_DRY_RUN"; then
+    RSYNC_ARGS="-n $@"
+else
+    RSYNC_ARGS="$@"
+fi
 
 test -z "$EVE_VERBOSE" || echo "Invoking rsync --archive $RSYNC_ARGS $MODEL_OVERLAY/ /"
 
