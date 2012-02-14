@@ -28,7 +28,7 @@ if ! test -d "$EVE_MODEL"; then
 fi
 
 if ! test -d "$EVE_MODEL/overlay.d"; then	 
-    echo "error: no overlay directory in model directory $EVE_MODEL" 1>&2
+    echo "error: no overlay directory $EVE_MODEL/overlay.d" 1>&2
     echo "Try setting EVE_MODEL in $EVE_CONF." 1>&2
     exit 1
 fi

@@ -65,6 +65,8 @@ Written by Simon Josefsson."
 	. $EVE_CONF
 	set +a
     fi
+
+    export EVE_CONF EVE_CONF_DIR
 }
 
 # Command line parsing.
