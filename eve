@@ -1,5 +1,4 @@
 #!/bin/sh
-set -e
 
 # Copyright (C) 2012 Simon Josefsson
 #
@@ -15,6 +14,9 @@ set -e
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+self=`basename $0`
 
 usage ()
 {
@@ -91,7 +93,7 @@ Written by Simon Josefsson."
 		shift
 		break ;;
 	    -* )
-		echo "eve: unknown option $1" 1>&2
+		echo "$self: unknown option $1" 1>&2
 		echo "Try 'eve --help' for more information." 1>&2
 		exit 1 ;;
 	    * )
@@ -113,7 +115,7 @@ shift
 dir="$EVE_CONF_DIR/$cmd.d"
 
 if ! test -d "$dir"; then
-    echo "eve: unknown command '$cmd'" 1>&2
+    echo "$self: unknown command '$cmd'" 1>&2
     echo "Try 'eve --help' for more information." 1>&2
     exit 1
 fi
@@ -122,12 +124,12 @@ parts=$(echo `find $dir/ -mindepth 1 -maxdepth 1 \
     -type f -executable -name '[0-9]*' \! -name \*~ | sort -n`)
 
 if test -z "$parts"; then
-    echo "eve: nothing to do?!" 1>&2
+    echo "$self: nothing to do?!" 1>&2
     exit 1
 fi
 
 for part in $parts; do
-    test -z "$EVE_VERBOSE" || echo "eve: invoking $part $@"
+    test -z "$EVE_VERBOSE" || echo "$self: invoking $part $@"
     "$part" "$@"
 done
 

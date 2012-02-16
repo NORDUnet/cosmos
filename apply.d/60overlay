@@ -1,5 +1,4 @@
 #!/bin/sh
-set -e
 
 # Copyright (C) 2012 Simon Josefsson
 #
@@ -16,7 +15,8 @@ set -e
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-self=$0
+set -e
+self=`basename $0`
 
 MODEL_OVERLAY=$EVE_MODEL/overlay.d
 if test -n "$EVE_DRY_RUN"; then
