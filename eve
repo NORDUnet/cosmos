@@ -19,10 +19,13 @@ set -e
 usage ()
 {
     echo "\
-Usage: eve [OPTION...]
+Usage: eve [OPTION...] COMMAND [COMMAND-OPTION...]
 
 Eve is meant for system administrators who wants to centralize and
 automate system configuration and package installation.
+
+The COMMAND specify the action sequence performed by the tool.
+Currently COMMAND may be 'apply'.
 
 Common options:
 
@@ -96,14 +99,30 @@ Written by Simon Josefsson."
 	esac
     done
 
+    if test $# -eq 0; then
+	usage
+	exit 0
+    fi
+
     export EVE_VERBOSE EVE_DRY_RUN
 }
 
-parts=$(echo `find -L $EVE_CONF_DIR/ -mindepth 2 -maxdepth 2 \
-    -type f -executable -path '*/[0-9]*.d/[0-9]*' \! -name \*~ | sort -n`)
+cmd="$1"
+shift
+
+dir="$EVE_CONF_DIR/$cmd.d"
+
+if ! test -d "$dir"; then
+    echo "eve: unknown command '$cmd'" 1>&2
+    echo "Try 'eve --help' for more information." 1>&2
+    exit 1
+fi
+
+parts=$(echo `find $dir/ -mindepth 1 -maxdepth 1 \
+    -type f -executable -name '[0-9]*' \! -name \*~ | sort -n`)
 
 if test -z "$parts"; then
-    echo "eve: nothing to do" 1>&2
+    echo "eve: nothing to do?!" 1>&2
     exit 1
 fi
 
