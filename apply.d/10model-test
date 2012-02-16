@@ -20,7 +20,7 @@ self=`basename $0`
 
 if test -z "$EVE_MODEL"; then	 
     echo "$self: error: model directory not configured" 1>&2
-    echo "$self: Try setting EVE_MODEL in $EVE_CONF." 1>&2
+    echo "$self: Try to set EVE_MODEL in $EVE_CONF." 1>&2
     exit 1
 fi
 
@@ -29,8 +29,9 @@ if ! test -d "$EVE_MODEL"; then
     exit 1
 fi
 
-if ! test -d "$EVE_MODEL/pre-tasks.d"; then	 
-    echo "$self: error: no pre-tasks directory $EVE_MODEL/pre-tasks.d" 1>&2
-    echo "$self: Try setting EVE_MODEL in $EVE_CONF." 1>&2
-    exit 1
-fi
+for d in pre-tasks.d delete.d overlay.d post-tasks.d; do
+    if ! test -d "$EVE_MODEL/$d"; then
+	echo "$self: error: no such directory $EVE_MODEL/$d" 1>&2
+	exit 1
+    fi
+done
