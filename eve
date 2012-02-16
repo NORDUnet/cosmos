@@ -19,13 +19,10 @@ set -e
 usage ()
 {
     echo "\
-Usage: eve [OPTION...] COMMAND [COMMAND-OPTION...]
+Usage: eve [OPTION...]
 
 Eve is meant for system administrators who wants to centralize and
 automate system configuration and package installation.
-
-The COMMAND specify the action sequence performed by the tool.
-Currently COMMAND may be 'overlay', 'delete', or 'tasks'.
 
 Common options:
 
@@ -33,9 +30,6 @@ Common options:
   -h, --help                show this help text.
   -V, --version             show version information.
   -v, --verbose             Increase verbosity.
-
-For the 'overlay' COMMAND then any COMMAND-OPTION are passed directly
-on to rsync.  For example, use '-v' to increase rsync verbosity.
 
 The environment variable EVE_CONF_DIR specify the location of a
 configuration file (defaults to /etc/eve/eve.conf) which is read
@@ -102,35 +96,18 @@ Written by Simon Josefsson."
 	esac
     done
 
-    if test $# -eq 0; then
-	usage
-	exit 0
-    fi
-
     export EVE_VERBOSE EVE_DRY_RUN
 }
 
-cmd="$1"
-shift
-
-dir="$EVE_CONF_DIR/$cmd.d"
-
-if ! test -d "$dir"; then
-    echo "eve: unknown command '$cmd'" 1>&2
-    echo "Try 'eve --help' for more information." 1>&2
-    exit 1
-fi
-
-parts=$(echo `find $dir/ -mindepth 1 -maxdepth 1 \
-    -type f -executable \! -name \*~ | sort -n`)
+parts=$(echo `find -L $EVE_CONF_DIR/ -mindepth 2 -maxdepth 2 \
+    -type f -path '*/[0-9]*.d/[0-9]*' \! -name \*~ | sort -n`)
 
 if test -z "$parts"; then
-    echo "eve: command '$cmd' does not do anything" 1>&2
-    echo "Try 'eve --help' for more information." 1>&2
+    echo "eve: nothing to do" 1>&2
     exit 1
 fi
 
-test -z "$EVE_VERBOSE" || echo "Enumerating $dir parts as $parts"
+test -z "$EVE_VERBOSE" || echo "Enumerating $EVE_CONF_DIR parts as $parts"
 
 for part in $parts; do
     test -z "$EVE_VERBOSE" || echo "Invoking $part $@"
