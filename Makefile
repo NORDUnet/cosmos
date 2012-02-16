@@ -30,7 +30,7 @@ install:
 	install -D -m 755 apply.d/70run-post-tasks $(DESTDIR)$(etcdir)/apply.d/70run-post-tasks
 
 check:
-	checkbashisms eve apply.d/*
+	checkbashisms --posix --extra eve `ls apply.d/* | grep -v 40delete`
 
 bootstrap:
 	@if test -z $$HOST; then \

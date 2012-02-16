@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (C) 2012 Simon Josefsson
 #
@@ -18,12 +18,16 @@
 set -e
 self=`basename $0`
 
+if test -n "$DRY_RUN$DRY_TASKS"; then
+    dry=echo
+else
+    dry=
+fi
+
 MODEL_DELETE=$EVE_MODEL/delete.d
 
-find $MODEL_DELETE -type f | (
-    while read file; do
-	set -- $file
-	file=$1
+find $MODEL_DELETE -type f -print0 | (
+    while IFS= read -r -d $'\0' file; do
 	test -z "$EVE_VERBOSE" || echo "$self: Removing $file"
     done
 )
