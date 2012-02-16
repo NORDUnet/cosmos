@@ -31,10 +31,11 @@ Currently COMMAND may be 'apply'.
 
 Common options:
 
-  -n, --dry-run             do nothing except print what should be done
-  -h, --help                show this help text.
-  -V, --version             show version information.
-  -v, --verbose             Increase verbosity.
+  -n, --dry-run             do nothing except explain what should be done
+  -N, --dry-tasks           dry run but tasks are invoked in dry mode
+  -h, --help                show this help text and exit
+  -V, --version             show version information and exit
+  -v, --verbose             explain what is being done
 
 The environment variable EVE_CONF_DIR specify the location of a
 configuration file (defaults to /etc/eve/eve.conf) which is read
@@ -79,6 +80,9 @@ Written by Simon Josefsson."
 	    --dry-run | -n)
 		EVE_DRY_RUN=y
 		shift ;;
+	    --dry-tasks | -N)
+		EVE_DRY_TASKS=y
+		shift ;;
 	    --verbose | -v)
 		EVE_VERBOSE=y
 		shift ;;
@@ -106,7 +110,9 @@ Written by Simon Josefsson."
 	exit 0
     fi
 
-    export EVE_VERBOSE EVE_DRY_RUN
+    export EVE_DRY_RUN
+    export EVE_DRY_TASKS
+    export EVE_VERBOSE
 }
 
 cmd="$1"

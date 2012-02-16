@@ -27,6 +27,9 @@ for part in $parts; do
     if test -n "$EVE_DRY_RUN"; then
 	test -z "$EVE_VERBOSE" || echo "$self: invoking (dry-run) $part $@"
 	echo "$part" "$@"
+    elif test -n "$EVE_DRY_TASKS"; then
+	test -z "$EVE_VERBOSE" || echo "$self: invoking (dry-tasks) $part $@"
+	"$part" "$@"
     else
 	test -z "$EVE_VERBOSE" || echo "$self: invoking $part $@"
 	"$part" "$@"
