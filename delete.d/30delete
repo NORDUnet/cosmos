@@ -18,7 +18,12 @@ set -e
 
 self=$0
 
-if test -n "$EVE_OVERLAY_ARCHIVE"; then
-    echo "$self: error: overlay archival not implemented yet." 1>&2
-    exit 1
-fi
+MODEL_DELETE=$EVE_MODEL/delete.d
+
+find $MODEL_DELETE -type f | (
+    while read file; do
+	set -- $file
+	file=$1
+	test -z "$EVE_VERBOSE" || echo "$self: Removing $file"
+    done
+)

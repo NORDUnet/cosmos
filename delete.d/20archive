@@ -16,9 +16,7 @@ set -e
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-self=$0
-
-if test -n "$EVE_OVERLAY_ARCHIVE"; then
-    echo "$self: error: overlay archival not implemented yet." 1>&2
+if test -n "$EVE_DELETE_ARCHIVE"; then
+    echo "error: delete archival not implemented yet." 1>&2
     exit 1
 fi

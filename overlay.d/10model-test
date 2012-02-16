@@ -16,19 +16,21 @@ set -e
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+self=$0
+
 if test -z "$EVE_MODEL"; then	 
-    echo "error: model directory not configured" 1>&2
-    echo "Try setting EVE_MODEL in $EVE_CONF." 1>&2
+    echo "$self: error: model directory not configured" 1>&2
+    echo "$self: Try setting EVE_MODEL in $EVE_CONF." 1>&2
     exit 1
 fi
 
 if ! test -d "$EVE_MODEL"; then	 
-    echo "error: model directory $EVE_MODEL does not exist" 1>&2
+    echo "$self: error: model directory $EVE_MODEL does not exist" 1>&2
     exit 1
 fi
 
 if ! test -d "$EVE_MODEL/overlay.d"; then	 
-    echo "error: no overlay directory $EVE_MODEL/overlay.d" 1>&2
-    echo "Try setting EVE_MODEL in $EVE_CONF." 1>&2
+    echo "$self: error: no overlay directory $EVE_MODEL/overlay.d" 1>&2
+    echo "$self: Try setting EVE_MODEL in $EVE_CONF." 1>&2
     exit 1
 fi
