@@ -36,6 +36,7 @@ Common options:
   -h, --help                show this help text and exit
   -V, --version             show version information and exit
   -v, --verbose             explain what is being done
+  -d, --debug               show debug information
 
 The environment variable EVE_CONF_DIR specify the location of a
 configuration file (defaults to /etc/eve/eve.conf) which is read
@@ -86,6 +87,9 @@ Written by Simon Josefsson."
 	    --verbose | -v)
 		EVE_VERBOSE=y
 		shift ;;
+	    --debug | -d)
+		EVE_DEBUG=y
+		shift ;;
 	    --help | -h )
 		usage
 		exit 0 ;;
@@ -113,6 +117,7 @@ Written by Simon Josefsson."
     export EVE_DRY_RUN
     export EVE_DRY_TASKS
     export EVE_VERBOSE
+    export EVE_DEBUG
 }
 
 cmd="$1"
@@ -135,7 +140,7 @@ if test -z "$parts"; then
 fi
 
 for part in $parts; do
-    test -z "$EVE_VERBOSE" || echo "$self: invoking $part $@"
+    test -z "$EVE_DEBUG" || echo "$self: invoking $part $@"
     "$part" "$@"
 done
 

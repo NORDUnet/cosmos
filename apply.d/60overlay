@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Copyright (C) 2012 Simon Josefsson
 #
@@ -18,24 +18,15 @@
 set -e
 self=`basename $0`
 
-# FIXME: How to do -print0 loop without relying on non-POSIX read -d?
+MODEL_OVERLAY=$EVE_MODEL/overlay.d
 
-cd "$EVE_MODEL/overlay.d" && find . -type f -print0 | (
-    while IFS= read -r -d $'\0' file; do
-	dir=`dirname "$file"`
-	if ! (cd / && test -d "$dir"); then
-	    test -z "$EVE_VERBOSE" || echo "$self: mkdir '$dir'"
-	    if test -n "$EVE_DRY_RUN$EVE_DRY_TASKS"; then
-		echo "mkdir \"$dir\""
-	    else
-		cd / && mkdir -p "$dir"
-	    fi
-	fi
-	test -z "$EVE_VERBOSE" || echo "$self: Copying '$file' '$dir'"
-	if test -n "$EVE_DRY_RUN$EVE_DRY_TASKS"; then
-	    echo "cp $EVE_MODEL/overlay.d/\"$file\"" /\"$dir\"
-	else
-	    cd / && cp "$EVE_MODEL/overlay.d/$file" "$dir"
-	fi
-    done
-)
+if test -n "$EVE_DRY_RUN$EVE_DRY_TASKS"; then
+    echo "rsync --archive $RSYNC_ARGS $MODEL_OVERLAY/ /"
+else
+    if test -n "$EVE_DEBUG"; then
+	RSYNC_ARGS="$RSYNC_ARGS -v"
+    fi
+    test -z "$EVE_VERBOSE" || \
+	echo "$self: Invoking rsync --archive $RSYNC_ARGS $MODEL_OVERLAY/ /"
+    rsync --archive $RSYNC_ARGS $MODEL_OVERLAY/ /
+fi
