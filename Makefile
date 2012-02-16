@@ -20,14 +20,14 @@ all:
 
 install:
 	install -D --backup --mode 640 eve.conf $(DESTDIR)$(etcdir)/eve.conf
-	install -D -m 644 eve $(DESTDIR)$(bindir)/eve
-	install -D -m 644 apply.d/10model-test $(DESTDIR)$(etcdir)/apply.d/10model-test
-	install -D -m 644 apply.d/20run-pre-tasks $(DESTDIR)$(etcdir)/apply.d/20run-pre-tasks
-	install -D -m 644 apply.d/30archive-before-delete $(DESTDIR)$(etcdir)/apply.d/30archive-before-delete
-	install -D -m 644 apply.d/40delete $(DESTDIR)$(etcdir)/apply.d/40delete
-	install -D -m 644 apply.d/50archive-before-overlay $(DESTDIR)$(etcdir)/apply.d/50archive-before-overlay
-	install -D -m 644 apply.d/60overlay $(DESTDIR)$(etcdir)/apply.d/60overlay
-	install -D -m 644 apply.d/70run-post-tasks $(DESTDIR)$(etcdir)/apply.d/70run-post-tasks
+	install -D -m 755 eve $(DESTDIR)$(bindir)/eve
+	install -D -m 755 apply.d/10model-test $(DESTDIR)$(etcdir)/apply.d/10model-test
+	install -D -m 755 apply.d/20run-pre-tasks $(DESTDIR)$(etcdir)/apply.d/20run-pre-tasks
+	install -D -m 755 apply.d/30archive-before-delete $(DESTDIR)$(etcdir)/apply.d/30archive-before-delete
+	install -D -m 755 apply.d/40delete $(DESTDIR)$(etcdir)/apply.d/40delete
+	install -D -m 755 apply.d/50archive-before-overlay $(DESTDIR)$(etcdir)/apply.d/50archive-before-overlay
+	install -D -m 755 apply.d/60overlay $(DESTDIR)$(etcdir)/apply.d/60overlay
+	install -D -m 755 apply.d/70run-post-tasks $(DESTDIR)$(etcdir)/apply.d/70run-post-tasks
 
 check:
 	checkbashisms eve apply.d/*
