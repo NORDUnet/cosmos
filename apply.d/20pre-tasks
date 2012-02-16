@@ -18,19 +18,17 @@ set -e
 
 self=$0
 
-if test -z "$EVE_MODEL"; then	 
-    echo "$self: error: model directory not configured" 1>&2
-    echo "$self: Try setting EVE_MODEL in $EVE_CONF." 1>&2
-    exit 1
-fi
+MODEL_PRE_TASKS=$EVE_MODEL/pre-tasks.d
 
-if ! test -d "$EVE_MODEL"; then	 
-    echo "$self: error: model directory $EVE_MODEL does not exist" 1>&2
-    exit 1
-fi
+parts=$(echo `find -L $MODEL_PRE_TASKS/ -mindepth 1 -maxdepth 1 \
+    -type f -name '[0-9]*' -executable \! -name \*~ | sort -n`)
 
-if ! test -d "$EVE_MODEL/pre-tasks.d"; then	 
-    echo "$self: error: no pre-tasks directory $EVE_MODEL/pre-tasks.d" 1>&2
-    echo "$self: Try setting EVE_MODEL in $EVE_CONF." 1>&2
-    exit 1
-fi
+for part in $parts; do
+    if test -n "$EVE_DRY_RUN"; then
+	test -z "$EVE_VERBOSE" || echo "$self: invoking (dry-run) $part $@"
+	echo "$part" "$@"
+    else
+	test -z "$EVE_VERBOSE" || echo "$self: invoking $part $@"
+	"$part" "$@"
+    fi
+done

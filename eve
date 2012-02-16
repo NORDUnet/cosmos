@@ -100,17 +100,15 @@ Written by Simon Josefsson."
 }
 
 parts=$(echo `find -L $EVE_CONF_DIR/ -mindepth 2 -maxdepth 2 \
-    -type f -path '*/[0-9]*.d/[0-9]*' \! -name \*~ | sort -n`)
+    -type f -executable -path '*/[0-9]*.d/[0-9]*' \! -name \*~ | sort -n`)
 
 if test -z "$parts"; then
     echo "eve: nothing to do" 1>&2
     exit 1
 fi
 
-test -z "$EVE_VERBOSE" || echo "Enumerating $EVE_CONF_DIR parts as $parts"
-
 for part in $parts; do
-    test -z "$EVE_VERBOSE" || echo "Invoking $part $@"
+    test -z "$EVE_VERBOSE" || echo "eve: invoking $part $@"
     "$part" "$@"
 done
 
