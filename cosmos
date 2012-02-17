@@ -33,9 +33,11 @@ Common options:
 
   -n, --dry-run             do nothing except explain what should be done
   -N, --dry-tasks           dry run but rsync/tasks are invoked in dry mode
+
+  -v, --verbose             explain what is being done
+
   -h, --help                show this help text and exit
   -V, --version             show version information and exit
-  -v, --verbose             explain what is being done
 
 The environment variable COSMOS_CONF_DIR specify the location of a
 configuration file (defaults to /etc/cosmos/cosmos.conf) which is read
