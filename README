@@ -15,4 +15,12 @@ Cosmos - A simple Configuration Management System
      world, universe, the earth
      mankind
 
-TBW
+Cosmos install/delete configuration files on the system and execute
+custom-written scripts to perform sysadmin tasks.  Cosmos is intended
+to be used with a central version controlled repository that hold the
+Cosmos "model" file hierarchy for a particular machine.
+
+In detail, Cosmos reads its configuration file
+(/etc/cosmos/cosmos.conf by default) that specify the Cosmos model
+path to use (by default /var/cache/cosmos) and then rsync over
+configuration files from /var/cache/cosmos/overlay to the root
