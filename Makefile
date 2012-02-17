@@ -35,7 +35,8 @@ check:
 bootstrap:
 	@if test -z $$HOST; then \
 		echo error: HOST unset; \
-		echo Try 'make bootstrap HOST=foobar.example.org'; \
+		echo "Try 'make bootstrap HOST=12.34.56.78'"; \
+		exit 1; \
 	fi
 	make install DESTDIR=tmp
 	rsync -av tmp/ root@$$HOST:/
