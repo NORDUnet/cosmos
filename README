@@ -20,7 +20,78 @@ custom-written scripts to perform sysadmin tasks.  Cosmos is intended
 to be used with a central version controlled repository that hold the
 Cosmos "model" file hierarchy for a particular machine.
 
-In detail, Cosmos reads its configuration file
-(/etc/cosmos/cosmos.conf by default) that specify the Cosmos model
-path to use (by default /var/cache/cosmos) and then rsync over
-configuration files from /var/cache/cosmos/overlay to the root
+Cosmos configuration file lives in /etc/cosmos/cosmos.conf by default.
+You may use the COSMOS_CONF_DIR to specify a separate configuration
+directory, which should contain cosmos.conf and the various *.d
+sub-directories.
+
+The default place for the Cosmos "model" hierarchy is
+/var/cache/cosmos.  It is specified in cosmos.conf by setting the
+COSMOS_MODEL environment variable.  You may also override it using the
+--root (or -r for short) on the command line.
+
+To understand what Cosmos helps you with, consider a system tree
+structure like this:
+
+   /etc/cosmos/cosmos.conf
+   /var/cache/cosmos/overlay/root/.ssh/foobar
+   /var/cache/cosmos/delete/etc/somewhere/file-to-be-removed
+
+The cosmos.conf file contains this:
+
+COSMOS_MODEL=/var/cache/cosmos
+COSMOS_ROOT=/
+
+The content of the two other files are irrelevant here.
+
+The /var/cache/cosmos/overlay/root/.ssh/foobar file holds a SSHD file
+to be installed as /root/.ssh/foobar.  (In this example I'm not using
+'.authorized_keys' as an example to avoid accidental overwrites when
+you test configurations.)
+
+The /var/cache/cosmos/delete/etc/somewhere/file-to-be-removed is a
+placeholder file to indicate that the file
+/etc/somewhere/file-to-be-removed should be removed.  Below we'll
+assume that you have a real file /etc/somewhere/file-to-be-removed on
+your system that should be removed.
+
+You can dry-run cosmos by using --dry-run (or -n for short).  In this
+setup it would print the following.  It doesn't do anything!  No files
+are removed and nothing is rsync'ed.
+
+root@latte:~# cosmos -n apply
+rm -f "/"/"./etc/somewhere/file-to-be-removed"
+rsync --archive /var/cache/cosmos/overlay/ /
+root@latte:~# 
+
+This mode is not as useful as it could be, because you only see the
+rsync command and not what it would do.  To run cosmos in a semi-dry
+mode, which will invoke rsync in dry mode, there is the --dry-tasks
+(or -N for short).
+
+root@latte:~# cosmos -N apply
+rm -f "/"/"./etc/somewhere/file-to-be-removed"
+sending incremental file list
+root/.ssh/
+root/.ssh/foobar
+
+sent 89 bytes  received 20 bytes  218.00 bytes/sec
+total size is 4  speedup is 0.04 (DRY RUN)
+root@latte:~# 
+
+If you think the output from the dry runs looks harmless, you can run
+it for real.  Here the --verbose (or -v fort short) mode is enabled,
+otherwise the command is silent.
+
+root@latte:~# cosmos -v apply
+40delete: Removing './etc/somewhere/file-to-be-removed'
+60overlay: Invoking rsync --archive -v /var/cache/cosmos/overlay/ /
+sending incremental file list
+root/.ssh/
+root/.ssh/foobar
+
+sent 133 bytes  received 36 bytes  338.00 bytes/sec
+total size is 4  speedup is 0.02
+root@latte:~# 
+
+This illustrate the fundamental task that cosmos does.
