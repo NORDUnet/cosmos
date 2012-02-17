@@ -18,7 +18,7 @@
 set -e
 self=`basename $0`
 
-MODEL_OVERLAY=$COSMOS_MODEL/overlay
+MODEL_OVERLAY="$COSMOS_MODEL/overlay"
 
 if test -n "$COSMOS_VERBOSE"; then
     RSYNC_ARGS="$RSYNC_ARGS -v"
@@ -35,5 +35,5 @@ if test -n "$COSMOS_DRY_TASKS"; then
 fi
 
 test -z "$COSMOS_VERBOSE" || \
-    echo "$self: Invoking rsync --archive$RSYNC_ARGS $MODEL_OVERLAY/ /"
-$dry rsync --archive $RSYNC_ARGS $MODEL_OVERLAY/ /
+    echo "$self: Invoking rsync --archive$RSYNC_ARGS $MODEL_OVERLAY/ $COSMOS_ROOT"
+$dry rsync --archive $RSYNC_ARGS "$MODEL_OVERLAY/" "$COSMOS_ROOT"

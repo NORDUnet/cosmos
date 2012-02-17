@@ -29,7 +29,9 @@ automate system configuration and package installation.
 The COMMAND specify the action sequence performed by the tool.
 Currently COMMAND may be 'apply'.
 
-Common options:
+Mandatory arguments to long options are mandatory for short options too.
+
+  -r, --root=ROOT           specify alternate root path to install files to
 
   -n, --dry-run             do nothing except explain what should be done
   -N, --dry-tasks           dry run but rsync/tasks are invoked in dry mode
@@ -79,6 +81,18 @@ Written by Simon Josefsson."
 {
     while test $# -gt 0; do
 	case "$1" in
+	    --root | -r )
+		shift
+		if test $# = 0; then
+		    echo "$self: missing argument for --root" 1>&2
+		    echo "Try 'cosmos --help' for more information." 1>&2
+		    exit 1
+		fi
+		COSMOS_ROOT=$1
+		shift ;;
+	    --root=* )
+		COSMOS_ROOT=`echo "X$1" | sed -e 's/^X--root=//'`
+		shift ;;
 	    --dry-run | -n)
 		COSMOS_DRY_RUN=y
 		shift ;;
@@ -112,6 +126,7 @@ Written by Simon Josefsson."
 	exit 0
     fi
 
+    export COSMOS_ROOT
     export COSMOS_DRY_RUN
     export COSMOS_DRY_TASKS
     export COSMOS_VERBOSE

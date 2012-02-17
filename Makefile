@@ -31,6 +31,20 @@ install:
 
 check:
 	checkbashisms --posix --extra cosmos `ls apply.d/* | grep -v 40delete`
+	rm -rf tst tst2
+	mkdir -p tst2 tst/etc/cosmos tst/var/cache/cosmos/overlay tst/var/cache/cosmos/delete tst/var/cache/cosmos/pre-tasks.d tst/var/cache/cosmos/post-tasks.d
+	ln -s `pwd`/apply.d tst/etc/cosmos/
+	echo 'foo' > tst/var/cache/cosmos/overlay/foo
+	echo 'foo bar' > "tst/var/cache/cosmos/overlay/foo bar"
+	echo 'bar\ntest' > "`printf tst/var/cache/cosmos/overlay/bar\\\ntest`"
+	echo COSMOS_MODEL=`pwd`/tst/var/cache/cosmos > tst/etc/cosmos/cosmos.conf
+	echo COSMOS_ROOT=`pwd`/tst2 >> tst/etc/cosmos/cosmos.conf
+	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos -n apply
+	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos -N apply
+	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos -n -v apply
+	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos -N -v apply
+	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos -v apply
+	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos apply
 
 bootstrap:
 	@if test -z $$HOST; then \
