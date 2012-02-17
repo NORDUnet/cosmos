@@ -9,7 +9,7 @@ DM-Upload-Allowed: yes
 Package: cosmos
 Architecture: all
 Depends: ${misc:Depends}, rsync
-Description: a simple configuration management system
+Description: simple configuration management system
  Cosmos install/delete configuration files on the system and execute
  custom-written scripts to perform sysadmin tasks.  Cosmos is intended
  to be used with a central version controlled repository that hold the
