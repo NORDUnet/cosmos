@@ -32,6 +32,6 @@ for part in $parts; do
 	"$part" "$@"
     else
 	test -z "$COSMOS_VERBOSE" || echo "$self: invoking $part $@"
-	"$part" "$@"
+	"$part" "$@" | sh
     fi
 done

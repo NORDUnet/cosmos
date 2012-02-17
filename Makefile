@@ -18,6 +18,13 @@ bindir = /usr/bin
 
 all:
 
+dist:
+	rm -rf cosmos-1.0
+	mkdir cosmos-1.0
+	cp -r COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf apply.d cosmos-1.0/
+	tar cfz cosmos-1.0.tar.gz cosmos-1.0
+	rm -rf cosmos-1.0
+
 install:
 	install -D --backup --mode 640 cosmos.conf $(DESTDIR)$(etcdir)/cosmos.conf
 	install -D -m 755 cosmos $(DESTDIR)$(bindir)/cosmos
