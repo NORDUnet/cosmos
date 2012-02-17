@@ -20,13 +20,20 @@ self=`basename $0`
 
 MODEL_OVERLAY=$EVE_MODEL/overlay
 
-if test -n "$EVE_DRY_RUN$EVE_DRY_TASKS"; then
-    echo "rsync --archive $RSYNC_ARGS $MODEL_OVERLAY/ /"
-else
-    if test -n "$EVE_DEBUG"; then
-	RSYNC_ARGS="$RSYNC_ARGS -v"
-    fi
-    test -z "$EVE_VERBOSE" || \
-	echo "$self: Invoking rsync --archive $RSYNC_ARGS $MODEL_OVERLAY/ /"
-    rsync --archive $RSYNC_ARGS $MODEL_OVERLAY/ /
+if test -n "$EVE_VERBOSE"; then
+    RSYNC_ARGS="$RSYNC_ARGS -v"
 fi
+
+if test -n "$EVE_DRY_RUN"; then
+    dry=echo
+else
+    dry=
+fi
+
+if test -n "$EVE_DRY_TASKS"; then
+    RSYNC_ARGS="$RSYNC_ARGS -n"
+fi
+
+test -z "$EVE_VERBOSE" || \
+    echo "$self: Invoking rsync --archive$RSYNC_ARGS $MODEL_OVERLAY/ /"
+$dry rsync --archive $RSYNC_ARGS $MODEL_OVERLAY/ /
