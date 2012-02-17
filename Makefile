@@ -15,6 +15,7 @@
 
 etcdir = /etc/cosmos
 bindir = /usr/bin
+mandir = /usr/share/man
 
 all:
 
@@ -29,7 +30,7 @@ dist: cosmos.1
 	tar cfz cosmos-1.0.tar.gz cosmos-1.0
 	rm -rf cosmos-1.0
 
-install:
+install: cosmos.1
 	install -D --backup --mode 640 cosmos.conf $(DESTDIR)$(etcdir)/cosmos.conf
 	install -D -m 755 cosmos $(DESTDIR)$(bindir)/cosmos
 	install -D -m 755 apply.d/10model-test $(DESTDIR)$(etcdir)/apply.d/10model-test
@@ -39,6 +40,7 @@ install:
 	install -D -m 755 apply.d/50archive-before-overlay $(DESTDIR)$(etcdir)/apply.d/50archive-before-overlay
 	install -D -m 755 apply.d/60overlay $(DESTDIR)$(etcdir)/apply.d/60overlay
 	install -D -m 755 apply.d/70run-post-tasks $(DESTDIR)$(etcdir)/apply.d/70run-post-tasks
+	install -D cosmos.1 $(DESTDIR)$(mandir)/man1/cosmos.1
 
 check:
 	checkbashisms --posix --extra cosmos `ls apply.d/* | grep -v 40delete`
