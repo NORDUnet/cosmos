@@ -31,7 +31,7 @@ else
 fi
 
 if test -n "$COSMOS_DRY_TASKS"; then
-    RSYNC_ARGS="$RSYNC_ARGS -n"
+    RSYNC_ARGS="$RSYNC_ARGS -n -v"
 fi
 
 test -z "$COSMOS_VERBOSE" || \
