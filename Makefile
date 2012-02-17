@@ -19,9 +19,9 @@ mandir = /usr/share/man
 
 all:
 
-cosmos.1:
-	help2man --no-info --no-discard-stderr ./cosmos > tmp-cosmos.1
-	mv tmp-cosmos.1 cosmos.1
+cosmos.1: cosmos
+	help2man --name="simple Configuration Management System" \
+		--no-info --no-discard-stderr --output=$@ ./cosmos
 
 dist: cosmos.1
 	rm -rf cosmos-1.0
