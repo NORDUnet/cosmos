@@ -18,10 +18,14 @@ bindir = /usr/bin
 
 all:
 
-dist:
+cosmos.1:
+	help2man --no-info --no-discard-stderr ./cosmos > tmp-cosmos.1
+	mv tmp-cosmos.1 cosmos.1
+
+dist: cosmos.1
 	rm -rf cosmos-1.0
 	mkdir cosmos-1.0
-	cp -r debian COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf apply.d cosmos-1.0/
+	cp -r debian COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf cosmos.1 apply.d cosmos-1.0/
 	tar cfz cosmos-1.0.tar.gz cosmos-1.0
 	rm -rf cosmos-1.0
 
