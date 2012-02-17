@@ -1,0 +1,14 @@
+Source: cosmos
+Maintainer: Simon Josefsson <simon@josefsson.org>
+Section: admin
+Priority: optional
+Build-Depends: debhelper (>= 8)
+Standards-Version: 3.9.3
+DM-Upload-Allowed: yes
+
+Package: cosmos
+Architecture: all
+Depends: ${misc:Depends}
+Description: a simple configuration management system
+ Cosmos can install/delete configuration files to the system and execute
+ custom-written scripts to perform sysadmin tasks.
