@@ -45,6 +45,7 @@ check:
 	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos -N -v apply
 	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos -v apply
 	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos apply
+	rm -rf tst tst2
 
 bootstrap:
 	@if test -z $$HOST; then \
