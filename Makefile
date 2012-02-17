@@ -21,7 +21,7 @@ all:
 dist:
 	rm -rf cosmos-1.0
 	mkdir cosmos-1.0
-	cp -r COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf apply.d cosmos-1.0/
+	cp -r debian COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf apply.d cosmos-1.0/
 	tar cfz cosmos-1.0.tar.gz cosmos-1.0
 	rm -rf cosmos-1.0
 
