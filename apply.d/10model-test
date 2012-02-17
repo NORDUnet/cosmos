@@ -29,7 +29,7 @@ if ! test -d "$EVE_MODEL"; then
     exit 1
 fi
 
-for d in pre-tasks.d delete.d overlay.d post-tasks.d; do
+for d in overlay delete pre-tasks.d post-tasks.d; do
     if ! test -d "$EVE_MODEL/$d"; then
 	echo "$self: error: no such directory $EVE_MODEL/$d" 1>&2
 	exit 1

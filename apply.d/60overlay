@@ -18,7 +18,7 @@
 set -e
 self=`basename $0`
 
-MODEL_OVERLAY=$EVE_MODEL/overlay.d
+MODEL_OVERLAY=$EVE_MODEL/overlay
 
 if test -n "$EVE_DRY_RUN$EVE_DRY_TASKS"; then
     echo "rsync --archive $RSYNC_ARGS $MODEL_OVERLAY/ /"
