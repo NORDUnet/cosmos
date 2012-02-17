@@ -19,7 +19,7 @@ mandir = /usr/share/man
 
 all:
 
-cosmos.1: cosmos
+cosmos.1: Makefile cosmos
 	help2man --name="simple Configuration Management System" \
 		--no-info --no-discard-stderr --output=$@ ./cosmos
 
