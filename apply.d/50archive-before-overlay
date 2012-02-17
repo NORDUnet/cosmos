@@ -18,7 +18,7 @@
 set -e
 self=`basename $0`
 
-if test -n "$EVE_OVERLAY_ARCHIVE"; then
+if test -n "$COSMOS_OVERLAY_ARCHIVE"; then
     echo "$self: error: overlay archival not implemented yet." 1>&2
     exit 1
 fi

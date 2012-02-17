@@ -13,14 +13,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-etcdir = /etc/eve
+etcdir = /etc/cosmos
 bindir = /usr/bin
 
 all:
 
 install:
-	install -D --backup --mode 640 eve.conf $(DESTDIR)$(etcdir)/eve.conf
-	install -D -m 755 eve $(DESTDIR)$(bindir)/eve
+	install -D --backup --mode 640 cosmos.conf $(DESTDIR)$(etcdir)/cosmos.conf
+	install -D -m 755 cosmos $(DESTDIR)$(bindir)/cosmos
 	install -D -m 755 apply.d/10model-test $(DESTDIR)$(etcdir)/apply.d/10model-test
 	install -D -m 755 apply.d/20run-pre-tasks $(DESTDIR)$(etcdir)/apply.d/20run-pre-tasks
 	install -D -m 755 apply.d/30archive-before-delete $(DESTDIR)$(etcdir)/apply.d/30archive-before-delete
@@ -30,7 +30,7 @@ install:
 	install -D -m 755 apply.d/70run-post-tasks $(DESTDIR)$(etcdir)/apply.d/70run-post-tasks
 
 check:
-	checkbashisms --posix --extra eve `ls apply.d/* | grep -v 40delete`
+	checkbashisms --posix --extra cosmos `ls apply.d/* | grep -v 40delete`
 
 bootstrap:
 	@if test -z $$HOST; then \

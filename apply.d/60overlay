@@ -18,22 +18,22 @@
 set -e
 self=`basename $0`
 
-MODEL_OVERLAY=$EVE_MODEL/overlay
+MODEL_OVERLAY=$COSMOS_MODEL/overlay
 
-if test -n "$EVE_VERBOSE"; then
+if test -n "$COSMOS_VERBOSE"; then
     RSYNC_ARGS="$RSYNC_ARGS -v"
 fi
 
-if test -n "$EVE_DRY_RUN"; then
+if test -n "$COSMOS_DRY_RUN"; then
     dry=echo
 else
     dry=
 fi
 
-if test -n "$EVE_DRY_TASKS"; then
+if test -n "$COSMOS_DRY_TASKS"; then
     RSYNC_ARGS="$RSYNC_ARGS -n"
 fi
 
-test -z "$EVE_VERBOSE" || \
+test -z "$COSMOS_VERBOSE" || \
     echo "$self: Invoking rsync --archive$RSYNC_ARGS $MODEL_OVERLAY/ /"
 $dry rsync --archive $RSYNC_ARGS $MODEL_OVERLAY/ /

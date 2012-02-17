@@ -21,9 +21,9 @@ self=`basename $0`
 usage ()
 {
     echo "\
-Usage: eve [OPTION...] COMMAND [COMMAND-OPTION...]
+Usage: cosmos [OPTION...] COMMAND [COMMAND-OPTION...]
 
-Eve is meant for system administrators who wants to centralize and
+Cosmos is meant for system administrators who wants to centralize and
 automate system configuration and package installation.
 
 The COMMAND specify the action sequence performed by the tool.
@@ -37,8 +37,8 @@ Common options:
   -V, --version             show version information and exit
   -v, --verbose             explain what is being done
 
-The environment variable EVE_CONF_DIR specify the location of a
-configuration file (defaults to /etc/eve/eve.conf) which is read
+The environment variable COSMOS_CONF_DIR specify the location of a
+configuration file (defaults to /etc/cosmos/cosmos.conf) which is read
 before command line parameters are parsed.
 
 Report bugs to <simon@josefsson.org>." 1>&2
@@ -47,7 +47,7 @@ Report bugs to <simon@josefsson.org>." 1>&2
 version ()
 {
     echo "\
-eve (Eve) 1.0
+cosmos (Cosmos) 1.0
 Copyright (C) 2012 Simon Josefsson
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
 This is free software: you are free to change and redistribute it.
@@ -58,19 +58,19 @@ Written by Simon Josefsson."
 
 # Read configuration file.
 {
-    if test -z "$EVE_CONF_DIR"; then
-	EVE_CONF_DIR=/etc/eve
+    if test -z "$COSMOS_CONF_DIR"; then
+	COSMOS_CONF_DIR=/etc/cosmos
     fi
 
-    EVE_CONF="$EVE_CONF_DIR/eve.conf"
+    COSMOS_CONF="$COSMOS_CONF_DIR/cosmos.conf"
 
-    if test -e $EVE_CONF; then
+    if test -e $COSMOS_CONF; then
 	set -a
-	. $EVE_CONF
+	. $COSMOS_CONF
 	set +a
     fi
 
-    export EVE_CONF EVE_CONF_DIR
+    export COSMOS_CONF COSMOS_CONF_DIR
 }
 
 # Command line parsing.
@@ -78,13 +78,13 @@ Written by Simon Josefsson."
     while test $# -gt 0; do
 	case "$1" in
 	    --dry-run | -n)
-		EVE_DRY_RUN=y
+		COSMOS_DRY_RUN=y
 		shift ;;
 	    --dry-tasks | -N)
-		EVE_DRY_TASKS=y
+		COSMOS_DRY_TASKS=y
 		shift ;;
 	    --verbose | -v)
-		EVE_VERBOSE=y
+		COSMOS_VERBOSE=y
 		shift ;;
 	    --help | -h )
 		usage
@@ -98,7 +98,7 @@ Written by Simon Josefsson."
 		break ;;
 	    -* )
 		echo "$self: unknown option $1" 1>&2
-		echo "Try 'eve --help' for more information." 1>&2
+		echo "Try 'cosmos --help' for more information." 1>&2
 		exit 1 ;;
 	    * )
 		break ;;
@@ -110,19 +110,19 @@ Written by Simon Josefsson."
 	exit 0
     fi
 
-    export EVE_DRY_RUN
-    export EVE_DRY_TASKS
-    export EVE_VERBOSE
+    export COSMOS_DRY_RUN
+    export COSMOS_DRY_TASKS
+    export COSMOS_VERBOSE
 }
 
 cmd="$1"
 shift
 
-dir="$EVE_CONF_DIR/$cmd.d"
+dir="$COSMOS_CONF_DIR/$cmd.d"
 
 if ! test -d "$dir"; then
     echo "$self: unknown command '$cmd'" 1>&2
-    echo "Try 'eve --help' for more information." 1>&2
+    echo "Try 'cosmos --help' for more information." 1>&2
     exit 1
 fi
 
