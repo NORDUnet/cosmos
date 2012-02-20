@@ -134,3 +134,34 @@ To write proper task scripts you should follow the following rules.
   if test -f /usr/bin/foobar; then
      echo 'apt-get install foobar'
   fi
+
+* Master the art of shell quoting!
+
+  To handle strings with embedded space, control characters or even
+  newlines safely, you need to be on top of your shell quoting.  It is
+  convenient to use "here documents" to output multiple lines, like this:
+
+  cat<<EOF
+	git config --global user.name "Root on `hostname`"
+	cp $HOME/foo /etc/bar
+  EOF
+
+  The effects of that may not be what you expect it to be, since the `
+  and $ are evaluated when the cat command is run.  This could lead to
+  violating rule #1 of no side effects if your `` command happens to
+  cause side effects.
+
+  If the limit string (EOF in our example) is quoted, evaluation of `
+  and $ etc won't happen.  Further, if the limit string is prefixed
+  with '-' it will suppress leading tabs (but not spaces) in the
+  output.  This can be used to make your scripts more readable.
+
+  cat<<-'EOF'
+	git config --global user.name "Root on `hostname`"
+	cp $HOME/foo /etc/bar
+  EOF
+
+  Of course, sometimes you may WANT evaluation of ` or $ to happen.
+  The code here may be an example of that, sometimes you want the
+  hostname and $HOME content to be clear when using Cosmos in dry
+  mode.
