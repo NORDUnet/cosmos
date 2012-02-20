@@ -165,3 +165,12 @@ To write proper task scripts you should follow the following rules.
   The code here may be an example of that, sometimes you want the
   hostname and $HOME content to be clear when using Cosmos in dry
   mode.
+
+* No interactive prompts
+
+  The scripts may run unattended so they should not rely on having a
+  user present.
+
+  Exceptions may include some initial bootstrapping code if you make
+  sure to always run those interactively and make sure that they are
+  never invoked again.
