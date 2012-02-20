@@ -17,6 +17,9 @@ Cosmos - A simple Configuration Management System
      world, universe, the earth
      mankind
 
+Introduction
+------------
+
 Cosmos install/delete configuration files on the system and execute
 custom-written scripts to perform sysadmin tasks.  Cosmos is intended
 to be used with a central version controlled repository that hold the
@@ -97,3 +100,37 @@ total size is 4  speedup is 0.02
 root@latte:~# 
 
 This illustrate the fundamental task that cosmos does.
+
+Guidelines for writing task scripts
+-----------------------------------
+
+All executable files in the pre-tasks.d and post-tasks.d sub-directory
+in the Cosmos model are invoked in numerically sorted order.  Each
+script should print to stdout the shell commands it wants to perform.
+To write proper task scripts you should follow the following rules.
+
+* No side effects!
+
+  Your script should not modify the state of the system.  Only print
+  to stdout the commands you want performed.
+
+* Run fast!
+
+  The script may be invoked many times, sometimes frequently, and
+  should finish quickly.  A simple way to achieve this is to wrap most
+  of the commands on the script in a 'if...fi' clause that checks for
+  the existance of some stamp file.  Either like this:
+
+  if test -f /var/spool/cosmos/foobar.stamp; then
+
+     echo 'apt-get install foobar'
+     ...
+     echo 'mkdir -p /var/spool/cosmos'
+     echo 'touch /var/spool/cosmos/foobar.stamp'
+  fi
+
+  Or without the need for a stamp file like this:
+
+  if test -f /usr/bin/foobar; then
+     echo 'apt-get install foobar'
+  fi
