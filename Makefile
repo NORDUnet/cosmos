@@ -13,6 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+VERSION=1.0
+
 DESTDIR?=
 prefix=/usr
 bindir=${prefix}/bin
@@ -23,11 +25,13 @@ INSTALL=install
 INSTALL_EXE=$(INSTALL) -D --mode 755
 INSTALL_DATA=$(INSTALL) -D --mode 0644
 
-D_APPLY=10model-test 20run-pre-tasks 30archive-before-delete 40delete	\
-	50archive-before-overlay 60overlay 70run-post-tasks
-D_CLONE=10repo-test 20clone-git 90repo-check
-D_GPG=50gpg
-
+D_APPLY=apply.d/10model-test apply.d/20run-pre-tasks		\
+	apply.d/30archive-before-delete apply.d/40delete	\
+	apply.d/50archive-before-overlay apply.d/60overlay	\
+	apply.d/70run-post-tasks
+D_CLONE=clone.d/10repo-test clone.d/20clone-git clone.d/90repo-check
+D_UPDATE=update.d/10repo-test update.d/20update-git
+D_GPG=gpg.d/50gpg
 
 all: cosmos.1
 
@@ -36,29 +40,19 @@ cosmos.1: Makefile cosmos
 		--no-info --no-discard-stderr --output=$@ ./cosmos
 
 dist: all
-	rm -rf cosmos-1.0
-	mkdir cosmos-1.0
-	cp -r debian COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf cosmos.1 apply.d clone.d update.d gpg.d cosmos-1.0/
-	tar cfz cosmos-1.0.tar.gz cosmos-1.0
-	rm -rf cosmos-1.0
+	rm -rf cosmos-$(VERSION)
+	mkdir cosmos-$(VERSION)
+	cp -r debian COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf cosmos.1 apply.d clone.d update.d gpg.d cosmos-$(VERSION)/
+	tar cfz cosmos-$(VERSION).tar.gz cosmos-$(VERSION)
+	rm -rf cosmos-$(VERSION)
 
 install: all
 	$(INSTALL) -D --backup --mode 640 cosmos.conf $(DESTDIR)$(etcdir)/cosmos/cosmos.conf
 	$(INSTALL_EXE) cosmos $(DESTDIR)$(bindir)/cosmos
-	$(INSTALL_EXE) apply.d/10model-test $(DESTDIR)$(etcdir)/cosmos/apply.d/10model-test
-	$(INSTALL_EXE) apply.d/20run-pre-tasks $(DESTDIR)$(etcdir)/cosmos/apply.d/20run-pre-tasks
-	$(INSTALL_EXE) apply.d/30archive-before-delete $(DESTDIR)$(etcdir)/cosmos/apply.d/30archive-before-delete
-	$(INSTALL_EXE) apply.d/40delete $(DESTDIR)$(etcdir)/cosmos/apply.d/40delete
-	$(INSTALL_EXE) apply.d/50archive-before-overlay $(DESTDIR)$(etcdir)/cosmos/apply.d/50archive-before-overlay
-	$(INSTALL_EXE) apply.d/60overlay $(DESTDIR)$(etcdir)/cosmos/apply.d/60overlay
-	$(INSTALL_EXE) apply.d/70run-post-tasks $(DESTDIR)$(etcdir)/cosmos/apply.d/70run-post-tasks
-	$(INSTALL_EXE) clone.d/10repo-test $(DESTDIR)$(etcdir)/cosmos/clone.d/10repo-test
-	$(INSTALL_EXE) clone.d/20clone-git $(DESTDIR)$(etcdir)/cosmos/clone.d/20clone-git
-	$(INSTALL_EXE) clone.d/90repo-check $(DESTDIR)$(etcdir)/cosmos/clone.d/90repo-check
-	$(INSTALL_EXE) update.d/10repo-test $(DESTDIR)$(etcdir)/cosmos/update.d/10repo-test
-	$(INSTALL_EXE) update.d/20update-git $(DESTDIR)$(etcdir)/cosmos/update.d/20update-git
-	$(INSTALL_EXE) gpg.d/50manage $(DESTDIR)$(etcdir)/cosmos/update.d/50manage
 	$(INSTALL) -D cosmos.1 $(DESTDIR)$(mandir)/man1/cosmos.1
+	for f in $(D_APPLY) $(D_CLONE) $(D_UPDATE) $(D_GPG); do \
+		$(INSTALL_EXE) $$f $(DESTDIR)$(etcdir)/cosmos/$$f; \
+	done
 
 clean:
 	rm -f cosmos.1
@@ -80,6 +74,15 @@ check:
 	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos -v apply
 	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos apply
 	rm -rf tst tst2
+
+distcheck: dist
+	rm -rf cosmos-$(VERSION)
+	tar xfz cosmos-$(VERSION).tar.gz
+	cd cosmos-$(VERSION)
+	make install DESTDIR=ff
+	make check
+	cd ..
+	rm -rf cosmos-$(VERSION)
 
 bootstrap:
 	@if test -z $$HOST; then \
