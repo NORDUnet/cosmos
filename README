@@ -24,8 +24,8 @@ Cosmos install/delete files on systems and execute custom-written
 scripts to perform sysadmin tasks.  Cosmos is intended to be used with
 a version controlled repository that hold the Cosmos "model" file
 hierarchy for a particular machine.  Usually the repository is
-centralized and Cosmos helps with fetching and verify integrity of the
-repository.
+centralized and Cosmos help you fetch and verify the integrity and
+authenticity of it.
 
 Cosmos configuration file lives in /etc/cosmos/cosmos.conf by default.
 You may use the COSMOS_CONF_DIR to specify a separate configuration
