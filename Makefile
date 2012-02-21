@@ -32,7 +32,7 @@ cosmos.1: Makefile cosmos
 dist: all
 	rm -rf cosmos-1.0
 	mkdir cosmos-1.0
-	cp -r debian COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf cosmos.1 apply.d cosmos-1.0/
+	cp -r debian COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf cosmos.1 apply.d clone.d cosmos-1.0/
 	tar cfz cosmos-1.0.tar.gz cosmos-1.0
 	rm -rf cosmos-1.0
 
@@ -46,6 +46,9 @@ install: all
 	$(INSTALL_EXE) apply.d/50archive-before-overlay $(DESTDIR)$(etcdir)/cosmos/apply.d/50archive-before-overlay
 	$(INSTALL_EXE) apply.d/60overlay $(DESTDIR)$(etcdir)/cosmos/apply.d/60overlay
 	$(INSTALL_EXE) apply.d/70run-post-tasks $(DESTDIR)$(etcdir)/cosmos/apply.d/70run-post-tasks
+	$(INSTALL_EXE) clone.d/10repo-test $(DESTDIR)$(etcdir)/cosmos/clone.d/10repo-test
+	$(INSTALL_EXE) clone.d/20clone-git $(DESTDIR)$(etcdir)/cosmos/clone.d/20clone-git
+	$(INSTALL_EXE) clone.d/90repo-check $(DESTDIR)$(etcdir)/cosmos/clone.d/90repo-check
 	$(INSTALL) -D cosmos.1 $(DESTDIR)$(mandir)/man1/cosmos.1
 
 clean:
