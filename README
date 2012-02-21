@@ -27,15 +27,27 @@ hierarchy for a particular machine.  Usually the repository is
 centralized and Cosmos help you fetch and verify the integrity and
 authenticity of it.
 
-Cosmos configuration file lives in /etc/cosmos/cosmos.conf by default.
-You may use the COSMOS_CONF_DIR to specify a separate configuration
-directory, which should contain cosmos.conf and the various *.d
-sub-directories.
+Cosmos configuration files lives in /etc/cosmos by default.  You may
+use the environment variable COSMOS_CONF_DIR to specify a separate
+configuration directory.  The directory should contain the
+configuration file cosmos.conf itself, and also the various *.d/
+sub-directories.  The configuration file is read before parsing
+command line arguments.
+
+Using a version controlled repository is optional but usually provides
+advantages.  The default place for the Cosmos repository is
+/var/cache/cosmos/repo.  The path is specified in cosmos.conf by
+setting the COSMOS_MODEL environment variable.  The repository is
+normally initialized by running 'cosmos clone VCURL' to download a
+remote repository.  Currently only 'git' URLs are supported.  For
+example:
+
+  git clone git://git.example.org/git/your-cosmos.git
 
 The default place for the Cosmos "model" hierarchy is
-/var/cache/cosmos/model.  It is specified in cosmos.conf by setting
-the COSMOS_MODEL environment variable.  You may also override it using
-the --root (or -r for short) on the command line.
+/var/cache/cosmos/model.  The path is specified in cosmos.conf by
+setting the COSMOS_MODEL environment variable.  You may also override
+it using the --root (or -r for short) on the command line.
 
 To understand what Cosmos helps you with, consider a system tree
 structure like this:
@@ -51,10 +63,10 @@ COSMOS_ROOT=/
 
 The content of the two other files are irrelevant here.
 
-The /var/cache/cosmos/model/overlay/root/.ssh/foobar file holds a SSHD
-file to be installed as /root/.ssh/foobar.  (In this example I'm not
-using '.authorized_keys' as an example to avoid accidental overwrites
-when you test configurations.)
+The /var/cache/cosmos/model/overlay/root/.ssh/foobar file holds a SSH
+configuration file to be installed as /root/.ssh/foobar.  (In this
+example I'm not using '.authorized_keys' as an example to avoid
+accidental overwrites when you test configurations.)
 
 The /var/cache/cosmos/model/delete/etc/somewhere/file-to-be-removed is
 a placeholder file to indicate that the file
@@ -107,16 +119,17 @@ Task scripts
 ------------
 
 All executable files in the pre-tasks.d and post-tasks.d sub-directory
-in the Cosmos model are invoked in order, sorted by 'sort'.  Each
-script should print to stdout the shell commands it wants to perform.
-To write proper task scripts you should follow the following rules.
+of the Cosmos model directory are invoked in order, sorted by 'sort'.
+Each script should print to stdout the shell commands it wants to
+perform.  To write proper task scripts you should consider the
+following guidelines.
 
 * No side effects!
 
   Your script should not modify the state of the system.  Only print
   to stdout the commands you want performed.
 
-* Run fast!
+* Write fast scripts!
 
   The script may be invoked many times, sometimes frequently, and
   should finish quickly.  A simple way to achieve this is to wrap most
