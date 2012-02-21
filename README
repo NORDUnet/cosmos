@@ -22,10 +22,10 @@ Introduction
 
 Cosmos install/delete files on systems and execute custom-written
 scripts to perform sysadmin tasks.  Cosmos is intended to be used with
-a version controlled repository that hold the Cosmos "model" file
-hierarchy for a particular machine.  Usually the repository is
-centralized and Cosmos help you fetch and verify the integrity and
-authenticity of it.
+a version controlled repository that hold the Cosmos "model" for a
+particular machine or set of machines.  Usually the repository is
+centralized, and Cosmos will help you fetch and verify the integrity
+and authenticity of it.
 
 Cosmos configuration files lives in /etc/cosmos by default.  You may
 use the environment variable COSMOS_CONF_DIR to specify a separate
@@ -39,18 +39,17 @@ advantages.  The default place for the Cosmos repository is
 /var/cache/cosmos/repo.  The path is specified in cosmos.conf by
 setting the COSMOS_MODEL environment variable.  The repository is
 normally initialized by running 'cosmos clone VCURL' to download a
-remote repository.  Currently only 'git' URLs are supported.  For
-example:
+remote repository.  Currently 'git' URLs are supported.  For example:
 
   git clone git://git.example.org/git/your-cosmos.git
 
-The default place for the Cosmos "model" hierarchy is
+The default place for the Cosmos "model" for your system is
 /var/cache/cosmos/model.  The path is specified in cosmos.conf by
 setting the COSMOS_MODEL environment variable.  You may also override
 it using the --root (or -r for short) on the command line.
 
-To understand what Cosmos helps you with, consider a system tree
-structure like this:
+To understand what Cosmos does, consider the following file system
+tree structure:
 
    /etc/cosmos/cosmos.conf
    /var/cache/cosmos/model/overlay/root/.ssh/foobar
@@ -64,9 +63,10 @@ COSMOS_ROOT=/
 The content of the two other files are irrelevant here.
 
 The /var/cache/cosmos/model/overlay/root/.ssh/foobar file holds a SSH
-configuration file to be installed as /root/.ssh/foobar.  (In this
-example I'm not using '.authorized_keys' as an example to avoid
-accidental overwrites when you test configurations.)
+configuration file to be installed as /root/.ssh/foobar.  (The file
+may more realistically be .authorized_keys, but I'm using a different
+example filename to reduce the risk of accidental overwrites of that
+critical file when you test configurations.)
 
 The /var/cache/cosmos/model/delete/etc/somewhere/file-to-be-removed is
 a placeholder file to indicate that the file
