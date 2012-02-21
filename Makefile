@@ -32,7 +32,7 @@ cosmos.1: Makefile cosmos
 dist: all
 	rm -rf cosmos-1.0
 	mkdir cosmos-1.0
-	cp -r debian COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf cosmos.1 apply.d clone.d update.d cosmos-1.0/
+	cp -r debian COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf cosmos.1 apply.d clone.d update.d gpg.d cosmos-1.0/
 	tar cfz cosmos-1.0.tar.gz cosmos-1.0
 	rm -rf cosmos-1.0
 
@@ -51,13 +51,14 @@ install: all
 	$(INSTALL_EXE) clone.d/90repo-check $(DESTDIR)$(etcdir)/cosmos/clone.d/90repo-check
 	$(INSTALL_EXE) update.d/10repo-test $(DESTDIR)$(etcdir)/cosmos/update.d/10repo-test
 	$(INSTALL_EXE) update.d/20update-git $(DESTDIR)$(etcdir)/cosmos/update.d/20update-git
+	$(INSTALL_EXE) gpg.d/50manage $(DESTDIR)$(etcdir)/cosmos/update.d/50manage
 	$(INSTALL) -D cosmos.1 $(DESTDIR)$(mandir)/man1/cosmos.1
 
 clean:
 	rm -f cosmos.1
 
 check:
-	checkbashisms --posix --extra cosmos `ls apply.d/* | grep -v 40delete` clone.d/* update.d/*
+	checkbashisms --posix --extra cosmos `ls apply.d/* | grep -v 40delete` clone.d/* update.d/* gpg.d/*
 	rm -rf tst tst2
 	mkdir -p tst2 tst/etc/cosmos tst/var/cache/cosmos/overlay tst/var/cache/cosmos/delete tst/var/cache/cosmos/pre-tasks.d tst/var/cache/cosmos/post-tasks.d
 	ln -s `pwd`/apply.d tst/etc/cosmos/
