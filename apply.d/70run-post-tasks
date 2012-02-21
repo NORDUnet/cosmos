@@ -21,7 +21,7 @@ self=`basename $0`
 MODEL_POST_TASKS=$COSMOS_MODEL/post-tasks.d
 
 parts=$(echo `find -L $MODEL_POST_TASKS/ -mindepth 1 -maxdepth 1 \
-    -type f -name '[0-9]*' -executable \! -name \*~ | sort --version-sort`)
+    -type f -name '[0-9]*' -executable \! -name \*~ | sort`)
 
 for part in $parts; do
     if test -n "$COSMOS_DRY_RUN"; then

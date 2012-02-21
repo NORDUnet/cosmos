@@ -20,10 +20,12 @@ Cosmos - A simple Configuration Management System
 Introduction
 ------------
 
-Cosmos install/delete configuration files on the system and execute
-custom-written scripts to perform sysadmin tasks.  Cosmos is intended
-to be used with a central version controlled repository that hold the
-Cosmos "model" file hierarchy for a particular machine.
+Cosmos install/delete files on systems and execute custom-written
+scripts to perform sysadmin tasks.  Cosmos is intended to be used with
+a version controlled repository that hold the Cosmos "model" file
+hierarchy for a particular machine.  Usually the repository is
+centralized and Cosmos helps with fetching and verify integrity of the
+repository.
 
 Cosmos configuration file lives in /etc/cosmos/cosmos.conf by default.
 You may use the COSMOS_CONF_DIR to specify a separate configuration
@@ -31,31 +33,31 @@ directory, which should contain cosmos.conf and the various *.d
 sub-directories.
 
 The default place for the Cosmos "model" hierarchy is
-/var/cache/cosmos.  It is specified in cosmos.conf by setting the
-COSMOS_MODEL environment variable.  You may also override it using the
---root (or -r for short) on the command line.
+/var/cache/cosmos/model.  It is specified in cosmos.conf by setting
+the COSMOS_MODEL environment variable.  You may also override it using
+the --root (or -r for short) on the command line.
 
 To understand what Cosmos helps you with, consider a system tree
 structure like this:
 
    /etc/cosmos/cosmos.conf
-   /var/cache/cosmos/overlay/root/.ssh/foobar
-   /var/cache/cosmos/delete/etc/somewhere/file-to-be-removed
+   /var/cache/cosmos/model/overlay/root/.ssh/foobar
+   /var/cache/cosmos/model/delete/etc/somewhere/file-to-be-removed
 
 The cosmos.conf file contains this:
 
-COSMOS_MODEL=/var/cache/cosmos
+COSMOS_MODEL=/var/cache/cosmos/model
 COSMOS_ROOT=/
 
 The content of the two other files are irrelevant here.
 
-The /var/cache/cosmos/overlay/root/.ssh/foobar file holds a SSHD file
-to be installed as /root/.ssh/foobar.  (In this example I'm not using
-'.authorized_keys' as an example to avoid accidental overwrites when
-you test configurations.)
+The /var/cache/cosmos/model/overlay/root/.ssh/foobar file holds a SSHD
+file to be installed as /root/.ssh/foobar.  (In this example I'm not
+using '.authorized_keys' as an example to avoid accidental overwrites
+when you test configurations.)
 
-The /var/cache/cosmos/delete/etc/somewhere/file-to-be-removed is a
-placeholder file to indicate that the file
+The /var/cache/cosmos/model/delete/etc/somewhere/file-to-be-removed is
+a placeholder file to indicate that the file
 /etc/somewhere/file-to-be-removed should be removed.  Below we'll
 assume that you have a real file /etc/somewhere/file-to-be-removed on
 your system that should be removed.
@@ -66,13 +68,13 @@ are removed and nothing is rsync'ed.
 
 root@latte:~# cosmos -n apply
 rm -f "/"/"./etc/somewhere/file-to-be-removed"
-rsync --archive /var/cache/cosmos/overlay/ /
+rsync --archive /var/cache/cosmos/model/overlay/ /
 root@latte:~# 
 
-This mode is not as useful as it could be, because you only see the
-rsync command and not what it would do.  To run cosmos in a semi-dry
-mode, which will invoke rsync in dry mode, there is the --dry-tasks
-(or -N for short).
+This dry mode is not as useful as it could be, because you only see
+that rsync will be invoked but not what it would do.  To run cosmos in
+a semi-dry mode, which will invoke rsync in dry mode, there is the
+--dry-tasks (or -N for short).
 
 root@latte:~# cosmos -N apply
 rm -f "/"/"./etc/somewhere/file-to-be-removed"
@@ -90,7 +92,7 @@ otherwise the command is silent.
 
 root@latte:~# cosmos -v apply
 40delete: Removing './etc/somewhere/file-to-be-removed'
-60overlay: Invoking rsync --archive -v /var/cache/cosmos/overlay/ /
+60overlay: Invoking rsync --archive -v /var/cache/cosmos/model/overlay/ /
 sending incremental file list
 root/.ssh/
 root/.ssh/foobar
@@ -101,11 +103,11 @@ root@latte:~#
 
 This illustrate the fundamental task that cosmos does.
 
-Guidelines for writing task scripts
------------------------------------
+Task scripts
+------------
 
 All executable files in the pre-tasks.d and post-tasks.d sub-directory
-in the Cosmos model are invoked in numerically sorted order.  Each
+in the Cosmos model are invoked in order, sorted by 'sort'.  Each
 script should print to stdout the shell commands it wants to perform.
 To write proper task scripts you should follow the following rules.
 
