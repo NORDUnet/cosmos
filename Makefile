@@ -23,6 +23,12 @@ INSTALL=install
 INSTALL_EXE=$(INSTALL) -D --mode 755
 INSTALL_DATA=$(INSTALL) -D --mode 0644
 
+D_APPLY=10model-test 20run-pre-tasks 30archive-before-delete 40delete	\
+	50archive-before-overlay 60overlay 70run-post-tasks
+D_CLONE=10repo-test 20clone-git 90repo-check
+D_GPG=50gpg
+
+
 all: cosmos.1
 
 cosmos.1: Makefile cosmos
