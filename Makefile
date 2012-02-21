@@ -58,6 +58,7 @@ clean:
 	rm -f cosmos.1
 
 check:
+	grep '^cosmos (Cosmos)' cosmos | grep -q "^cosmos (Cosmos) $(VERSION)$$"
 	checkbashisms --posix --extra cosmos `ls apply.d/* | grep -v 40delete` clone.d/* update.d/* gpg.d/*
 	rm -rf tst tst2
 	mkdir -p tst2 tst/etc/cosmos tst/var/cache/cosmos/overlay tst/var/cache/cosmos/delete tst/var/cache/cosmos/pre-tasks.d tst/var/cache/cosmos/post-tasks.d
