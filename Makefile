@@ -39,13 +39,6 @@ cosmos.1: Makefile cosmos
 	help2man --name="simple Configuration Management System" \
 		--no-info --no-discard-stderr --output=$@ ./cosmos
 
-dist: all
-	rm -rf cosmos-$(VERSION)
-	mkdir cosmos-$(VERSION)
-	cp -r debian COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf cosmos.1 apply.d clone.d update.d gpg.d cosmos-$(VERSION)/
-	tar cfz cosmos-$(VERSION).tar.gz cosmos-$(VERSION)
-	rm -rf cosmos-$(VERSION)
-
 install: all
 	$(INSTALL) -D --backup --mode 640 cosmos.conf $(DESTDIR)$(etcdir)/cosmos/cosmos.conf
 	$(INSTALL_EXE) cosmos $(DESTDIR)$(bindir)/cosmos
@@ -75,6 +68,13 @@ check:
 	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos -v apply
 	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos apply
 	rm -rf tst tst2
+
+dist: all
+	rm -rf cosmos-$(VERSION)
+	mkdir cosmos-$(VERSION)
+	cp -r debian COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf cosmos.1 apply.d clone.d update.d gpg.d cosmos-$(VERSION)/
+	tar cfz cosmos-$(VERSION).tar.gz cosmos-$(VERSION)
+	rm -rf cosmos-$(VERSION)
 
 distcheck: dist
 	rm -rf cosmos-$(VERSION)
