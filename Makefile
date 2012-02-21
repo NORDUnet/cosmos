@@ -79,10 +79,8 @@ check:
 distcheck: dist
 	rm -rf cosmos-$(VERSION)
 	tar xfz cosmos-$(VERSION).tar.gz
-	cd cosmos-$(VERSION)
-	make install DESTDIR=ff
-	make check
-	cd ..
+	make -C cosmos-$(VERSION) install DESTDIR=ff
+	make -C cosmos-$(VERSION) check
 	rm -rf cosmos-$(VERSION)
 
 bootstrap:
