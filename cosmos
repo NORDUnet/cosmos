@@ -27,7 +27,6 @@ Cosmos is meant for system administrators who wants to centralize and
 automate system configuration and package installation.
 
 The COMMAND specify the action sequence performed by the tool.
-Currently COMMAND may be 'apply'.
 
 Mandatory arguments to long options are mandatory for short options too.
 
@@ -41,9 +40,10 @@ Mandatory arguments to long options are mandatory for short options too.
   -h, --help                show this help text and exit
   -V, --version             show version information and exit
 
-The environment variable COSMOS_CONF_DIR specify the location of a
-configuration file (defaults to /etc/cosmos/cosmos.conf) which is read
-before command line parameters are parsed.
+The environment variable COSMOS_CONF_DIR may specify a path to the
+configuration directory where the file cosmos.conf is read before
+command line parameters are parsed.  The file is sourced as a shell
+script.  If COSMOS_CONF_DIR is not set, the path /etc/cosmos is used.
 
 Report bugs to <simon@josefsson.org>." 1>&2
 }
@@ -65,16 +65,13 @@ Written by Simon Josefsson."
     if test -z "$COSMOS_CONF_DIR"; then
 	COSMOS_CONF_DIR=/etc/cosmos
     fi
+    export COSMOS_CONF_DIR
 
-    COSMOS_CONF="$COSMOS_CONF_DIR/cosmos.conf"
-
-    if test -e $COSMOS_CONF; then
+    if test -e "$COSMOS_CONF_DIR/cosmos.conf"; then
 	set -a
-	. $COSMOS_CONF
+	. "$COSMOS_CONF_DIR/cosmos.conf"
 	set +a
     fi
-
-    export COSMOS_CONF COSMOS_CONF_DIR
 }
 
 # Command line parsing.
@@ -144,7 +141,7 @@ if ! test -d "$dir"; then
 fi
 
 parts=$(echo `find $dir/ -mindepth 1 -maxdepth 1 \
-    -type f -executable -name '[0-9]*' \! -name \*~ | sort -n`)
+    -type f -executable -name '[0-9]*' \! -name \*~ | sort`)
 
 if test -z "$parts"; then
     echo "$self: nothing to do?!" 1>&2
