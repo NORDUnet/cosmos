@@ -19,7 +19,8 @@ set -e
 self=`basename $0`
 
 if ! test -d "$COSMOS_REPO_MODEL"; then
-    echo bah
+    echo "$self: error: no model directory in repository: $COSMOS_REPO_MODEL" 1>&2
+    echo "$self: Try to set COSMOS_REPO_MODEL in $COSMOS_CONF or fix repository." 1>&2
     exit 1
 fi
 

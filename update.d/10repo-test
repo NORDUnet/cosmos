@@ -29,3 +29,9 @@ if ! test -d "$COSMOS_REPO"; then
     echo "$self: Try 'cosmos clone' to create it." 1>&2
     exit 1
 fi
+
+if test -z "$COSMOS_REPO_MODEL"; then
+    echo "$self: error: model directory in repository not configured" 1>&2
+    echo "$self: Try to set COSMOS_REPO_MODEL in $COSMOS_CONF." 1>&2
+    exit 1
+fi
