@@ -63,13 +63,14 @@ Written by Simon Josefsson."
 # Read configuration file.
 {
     if test -z "$COSMOS_CONF_DIR"; then
-	COSMOS_CONF_DIR=/etc/cosmos
+	COSMOS_CONF_DIR="/etc/cosmos"
     fi
-    export COSMOS_CONF_DIR
+    COSMOS_CONF="$COSMOS_CONF_DIR/cosmos.conf"
+    export COSMOS_CONF_DIR COSMOS_CONF
 
-    if test -e "$COSMOS_CONF_DIR/cosmos.conf"; then
+    if test -e "$COSMOS_CONF"; then
 	set -a
-	. "$COSMOS_CONF_DIR/cosmos.conf"
+	. "$COSMOS_CONF"
 	set +a
     fi
 }

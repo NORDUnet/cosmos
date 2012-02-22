@@ -26,7 +26,7 @@ case "$repo" in
 	;;
     *)
 	test -z "$COSMOS_VERBOSE" || \
-	    echo "$self: ignoring non-git repository: $repo" 1>&1
+	    echo "$self: ignoring non-git repository: $repo" 1>&2
 	exit 0
 	;;
 esac

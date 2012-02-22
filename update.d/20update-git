@@ -20,7 +20,7 @@ self=`basename $0`
 
 if ! test -d "$COSMOS_REPO/.git"; then
     test -z "$COSMOS_VERBOSE" || \
-	echo "$self: ignoring non-git repository: $COSMOS_REPO" 1>&1
+	echo "$self: ignoring non-git repository: $COSMOS_REPO" 1>&2
     exit 0
 fi
 
@@ -31,9 +31,9 @@ else
 fi
 
 if test -n "$COSMOS_DRY_RUN$COSMOS_DRY_TASKS"; then
-    test -z "$COSMOS_VERBOSE" || echo "$self: invoking (dry-run) update"
+    test -z "$COSMOS_VERBOSE" || echo "$self: invoking (dry-run) git pull"
     echo "cd \"$COSMOS_REPO\" && git pull $GIT_ARGS"
 else
-    test -z "$COSMOS_VERBOSE" || echo "$self: cloning $repo into $COSMOS_REPO"
+    test -z "$COSMOS_VERBOSE" || echo "$self: updating repo in $COSMOS_REPO"
     cd "$COSMOS_REPO" && git pull $GIT_ARGS
 fi
