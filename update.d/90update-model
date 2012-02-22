@@ -30,13 +30,13 @@ fi
 if test -n "$COSMOS_DRY_RUN"; then
     test -z "$COSMOS_VERBOSE" \
 	|| echo "$self: invoking (dry-run) rsync"
-    echo "rsync$RSYNC_ARGS --archive \"$COSMOS_REPO_MODEL\" \"$COSMOS_MODEL\""
+    echo "rsync$RSYNC_ARGS --archive --delete \"$COSMOS_REPO_MODEL\" \"$COSMOS_MODEL\""
 elif test -n "$COSMOS_DRY_TASKS"; then
     test -z "$COSMOS_VERBOSE" \
 	|| echo "$self: invoking (dry-tasks) rsync$RSYNC_ARGS --dry-run --archive --delete \"$COSMOS_REPO_MODEL\" \"$COSMOS_MODEL\""
     rsync$RSYNC_ARGS --dry-run --archive --delete "$COSMOS_REPO_MODEL" "$COSMOS_MODEL"
 else
     test -z "$COSMOS_VERBOSE" \
-	|| echo "$self: invoking rsync --archive \"$COSMOS_REPO_MODEL\" \"$COSMOS_MODEL\""
-    rsync$RSYNC_ARGS --archive --delete "$COSMOS_REPO_MODEL" "$COSMOS_MODEL"
+	|| echo "$self: invoking rsync$RSYNC_ARGS --archive --delete \"$COSMOS_REPO_MODEL/\" \"$COSMOS_MODEL\""
+    rsync$RSYNC_ARGS --archive --delete "$COSMOS_REPO_MODEL/" "$COSMOS_MODEL"
 fi
