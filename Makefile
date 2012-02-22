@@ -30,7 +30,8 @@ D_APPLY=apply.d/10model-test apply.d/20run-pre-tasks		\
 	apply.d/50archive-before-overlay apply.d/60overlay	\
 	apply.d/70run-post-tasks
 D_CLONE=clone.d/10repo-test clone.d/20clone-git clone.d/90repo-check
-D_UPDATE=update.d/10repo-test update.d/20update-git
+D_UPDATE=update.d/10repo-test update.d/20update-git	\
+	update.d/25verify-git update.d/90update-model
 D_GPG=gpg.d/50gpg
 
 all: cosmos.1
