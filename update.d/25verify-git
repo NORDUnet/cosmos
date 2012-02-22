@@ -25,7 +25,8 @@ if ! test -d "$COSMOS_REPO/.git"; then
 fi
 
 if test -z "$COSMOS_UPDATE_VERIFY"; then
-    test -z "$COSMOS_VERBOSE" || echo "$self: not asked to verify anything" 1>&2
+    test -z "$COSMOS_VERBOSE" \
+	|| echo "$self: not asked to verify, ignoring" 1>&2
     exit 0
 fi
 
@@ -34,7 +35,7 @@ export GNUPGHOME
 
 if ! test -d "$GNUPGHOME"; then
     echo "$self: error: directory does not exist: $GNUPGHOME" 1>&2
-    echo "$self: Try running 'cosmos gpg --import' on trusted keys." 1>&2
+    echo "$self: Try 'cosmos gpg --import' to add trusted keys." 1>&2
     exit 1
 fi
 
@@ -57,8 +58,12 @@ test -z "$COSMOS_VERBOSE" || echo "$self: verifying tag: $tag" 1>&2
 
 cd $COSMOS_REPO && git tag -v $tag
 
-# FIXME: Should we protect against removed tags?  An attacker could
-# remove tags in the repo to make machines use an older signed tag (to
-# possibly make them roll back to a vulnerable state).  By remembering
-# the last verified tag, and checking that the new tag sorts higher
-# than the old one, that attack becomes harder.
+# FIXME: Should we protect against removed tags?  An attacker that
+# controls the remote repository could remove tags in the repo to make
+# machines find an older signed tag.  The attacker would then achieve
+# rolling back the machine to a potentially vulnerable state.  By
+# remembering the last verified tag, and checking that the new tag
+# sorts higher than the old one, that attack is solved.  DoS'ing the
+# connection to the git repository is always possible, though, but it
+# will only caused newer updates to be applied, not rolling back
+# earlier updates.
