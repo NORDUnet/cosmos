@@ -41,7 +41,7 @@ setting the COSMOS_MODEL environment variable.  The repository is
 normally initialized by running 'cosmos clone VCURL' to download a
 remote repository.  Currently 'git' URLs are supported.  For example:
 
-  git clone git://git.example.org/git/your-cosmos.git
+  cosmos clone git://git.example.org/git/your-cosmos.git
 
 The default place for the Cosmos "model" for your system is
 /var/cache/cosmos/model.  The path is specified in cosmos.conf by
