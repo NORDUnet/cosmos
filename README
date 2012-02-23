@@ -23,30 +23,48 @@ Introduction
 Cosmos install/delete files on systems and execute custom-written
 scripts to perform sysadmin tasks.  Cosmos is intended to be used with
 a version controlled repository that hold the Cosmos "model" for a
-particular machine or set of machines.  Usually the repository is
-centralized, and Cosmos will help you fetch and verify the integrity
-and authenticity of it.
+particular machine or set of machines.  The repository is usually
+centralized, and Cosmos help you fetch and verify the integrity and
+authenticity before using files from it.
 
-Cosmos configuration files lives in /etc/cosmos by default.  You may
-use the environment variable COSMOS_CONF_DIR to specify a separate
+Cosmos configuration lives in /etc/cosmos/ by default.  You may use
+the environment variable COSMOS_CONF_DIR to specify a separate
 configuration directory.  The directory should contain the
-configuration file cosmos.conf itself, and also the various *.d/
-sub-directories.  The configuration file is read before parsing
-command line arguments.
+configuration file cosmos.conf itself and the various *.d/
+sub-directories which holds the extensible implementation.  The
+configuration file is read before parsing command line arguments.
 
-Using a version controlled repository is optional but usually provides
-advantages.  The default place for the Cosmos repository is
-/var/cache/cosmos/repo.  The path is specified in cosmos.conf by
-setting the COSMOS_MODEL environment variable.  The repository is
-normally initialized by running 'cosmos clone VCURL' to download a
-remote repository.  Currently 'git' URLs are supported.  For example:
+Using a version controlled repository is optional but recommended.
+The repository is normally initialized by running 'cosmos clone VCURL'
+to download a remote repository.  Currently 'git://' URLs are
+supported.  For example:
 
   cosmos clone git://git.example.org/git/your-cosmos.git
+
+The default place for the Cosmos repository is /var/cache/cosmos/repo.
+The path is specified in cosmos.conf by setting the COSMOS_REPO
+environment variable.
+
+Normally you use the same reopsitory for several machines, so you need
+to specify the path within the repository that should be used for the
+machine you are configuring.  Set the environment variable
+COSMOS_REPO_MODEL in cosmos.conf to specify the path.  For example,
+the machine "someserver.example.org" would use:
+
+  COSMOS_REPO_MODEL="$COSMOS_REPO/someserver.example.org"
+
+The cosmos repository is updated (e.g., git pull) by running 'cosmos
+update'.  That command will also copy the files from COSMOS_REPO_MODEL
+into the path used by Cosmos to actually perform its work, the Cosmos
+"model".
 
 The default place for the Cosmos "model" for your system is
 /var/cache/cosmos/model.  The path is specified in cosmos.conf by
 setting the COSMOS_MODEL environment variable.  You may also override
 it using the --root (or -r for short) on the command line.
+
+It is below the COSMOS_MODEL path that you will find files that will
+be applied to the machine.
 
 To understand what Cosmos does, consider the following file system
 tree structure:
