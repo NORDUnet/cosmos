@@ -56,7 +56,9 @@ fi
 
 test -z "$COSMOS_VERBOSE" || echo "$self: verifying tag: $tag" 1>&2
 
-cd $COSMOS_REPO && git tag -v $tag
+cd $COSMOS_REPO && \
+    git checkout $tag && \
+    git tag -v $tag
 
 # FIXME: Should we protect against removed tags?  An attacker that
 # controls the remote repository could remove tags in the repo to make
