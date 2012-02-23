@@ -32,9 +32,9 @@ fi
 
 if test -n "$COSMOS_DRY_RUN$COSMOS_DRY_TASKS"; then
     test -z "$COSMOS_VERBOSE" || echo "$self: invoking (dry-run) git pull"
-    echo "cd \"$COSMOS_REPO\" && git pull$GIT_ARGS"
+    echo "cd \"$COSMOS_REPO\" && git checkout master && git pull$GIT_ARGS"
 else
     test -z "$COSMOS_VERBOSE" || \
-	echo "$self: running task: cd \"$COSMOS_REPO\" && git pull$GIT_ARGS"
-    cd "$COSMOS_REPO" && git pull $GIT_ARGS
+	echo "$self: running task: cd \"$COSMOS_REPO\" && git checkout master && git pull$GIT_ARGS"
+    cd "$COSMOS_REPO" && git checkout master && git pull $GIT_ARGS
 fi
