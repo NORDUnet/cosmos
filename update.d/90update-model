@@ -30,7 +30,7 @@ else
     dry_run=
 fi
 
-RSYNC_CMD="rsync$RSYNC_ARGS --recursive --delete"
+RSYNC_CMD="rsync$RSYNC_ARGS --archive --delete"
 RSYNC="$RSYNC_CMD"
 
 # FIXME: There is no way to escape a : in a path.  This is similar to
