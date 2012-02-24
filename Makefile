@@ -70,6 +70,7 @@ check:
 	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos -N -v apply
 	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos -v apply
 	COSMOS_CONF_DIR=`pwd`/tst/etc/cosmos ./cosmos apply
+	ls -la tst2/foo tst2/"foo bar" "`printf tst2/bar\\\ntest`"
 	rm -rf tst tst2
 
 dist: all
