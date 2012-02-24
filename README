@@ -138,66 +138,29 @@ Task scripts
 
 All executable files in the pre-tasks.d and post-tasks.d sub-directory
 of the Cosmos model directory are invoked in order, sorted by 'sort'.
-Each script should print to stdout the shell commands it wants to
-perform.  To write proper task scripts you should consider the
-following guidelines.
-
-* No side effects!
-
-  Your script should not modify the state of the system.  Only print
-  to stdout the commands you want performed.
+The scripts can do essentially anything, which is useful but can be
+dangerous unless you are careful.  To write proper task scripts you
+should consider the following guidelines.
 
 * Write fast scripts!
 
   The script may be invoked many times, sometimes frequently, and
   should finish quickly.  A simple way to achieve this is to wrap most
-  of the commands on the script in a 'if...fi' clause that checks for
-  the existance of some stamp file.  Either like this:
+  of the commands on the script in a if-clause that checks for the
+  existance of some stamp file.  Either like this:
 
-  if test -f /var/spool/cosmos/foobar.stamp; then
-
-     echo 'apt-get install foobar'
+  if test -f /var/spool/cosmos/stamps/foobar.stamp; then
+     apt-get install foobar
      ...
-     echo 'mkdir -p /var/spool/cosmos'
-     echo 'touch /var/spool/cosmos/foobar.stamp'
+     mkdir -p /var/spool/cosmos/stamps
+     touch /var/spool/cosmos/stamps/foobar.stamp
   fi
 
   Or without the need for a stamp file like this:
 
   if test -f /usr/bin/foobar; then
-     echo 'apt-get install foobar'
+     apt-get install foobar
   fi
-
-* Master the art of shell quoting!
-
-  To handle strings with embedded space, control characters or even
-  newlines safely, you need to be on top of your shell quoting.  It is
-  convenient to use "here documents" to output multiple lines, like this:
-
-  cat<<EOF
-	git config --global user.name "Root on `hostname`"
-	cp $HOME/foo /etc/bar
-  EOF
-
-  The effects of that may not be what you expect it to be, since the `
-  and $ are evaluated when the cat command is run.  This could lead to
-  violating rule #1 of no side effects if your `` command happens to
-  cause side effects.
-
-  If the limit string (EOF in our example) is quoted, evaluation of `
-  and $ etc won't happen.  Further, if the limit string is prefixed
-  with '-' it will suppress leading tabs (but not spaces) in the
-  output.  This can be used to make your scripts more readable.
-
-  cat<<-'EOF'
-	git config --global user.name "Root on `hostname`"
-	cp $HOME/foo /etc/bar
-  EOF
-
-  Of course, sometimes you may WANT evaluation of ` or $ to happen.
-  The code here may be an example of that, sometimes you want the
-  hostname and $HOME content to be clear when using Cosmos in dry
-  mode.
 
 * No interactive prompts
 
@@ -207,3 +170,12 @@ following guidelines.
   Exceptions may include some initial bootstrapping code if you make
   sure to always run those interactively and make sure that they are
   never invoked again.
+
+* Respect the COSMOS_DRY_TASK environment variable
+
+  This enable 'cosmos -N apply' to be more useful to the sysadmin, not
+  having to 'sh -x' trace the task scripts.
+
+* Use the COSMOS_VERBOSE environment variable when useful
+
+  This enable 'cosmos -v apply' to produce interesting output.
