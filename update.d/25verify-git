@@ -56,9 +56,36 @@ fi
 
 test -z "$COSMOS_VERBOSE" || echo "$self: verifying tag: $tag" 1>&2
 
+if test -n "$COSMOS_VERBOSE"; then
+    GIT_CHECKOUT_ARGS=
+else
+    GIT_CHECKOUT_ARGS=" -q"
+fi
+if test -n "$COSMOS_DRY_RUN$COSMOS_DRY_TASKS"; then
+    dry_run=echo
+else
+    dry_run=
+fi
+
+test -z "$COSMOS_VERBOSE" || \
+    echo "$self: invoking git: cd \"$COSMOS_REPO\" && git checkout $GIT_CHECKOUT_ARGS $tag && git tag -v $tag"
+
+# FIXME: 'git tag -v' is verbose by default and there is no -q to
+# silence it.  Therefor, we have to redirect stdout and stderr to
+# /dev/null.  When there is an error, this results in no output which
+# is not ideal.  In this situation, use 'cosmos update -v' to get the
+# output.
+
 cd $COSMOS_REPO && \
-    git checkout $tag && \
-    git tag -v $tag
+    $dry_run git checkout $GIT_CHECKOUT_ARGS $tag && (
+    if test -n "$COSMOS_VERBOSE"; then
+	$dry_run git tag -v $tag
+    elif test -n "$COSMOS_DRY_RUN$COSMOS_DRY_TASKS"; then
+	echo 'git tag -v $tag > /dev/null 2>&1'
+    else
+	git tag -v $tag > /dev/null 2>&1
+    fi
+)
 
 # FIXME: Should we protect against removed tags?  An attacker that
 # controls the remote repository could remove tags in the repo to make
