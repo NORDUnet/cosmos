@@ -25,16 +25,21 @@ if ! test -d "$COSMOS_REPO/.git"; then
 fi
 
 if test -n "$COSMOS_VERBOSE"; then
-    GIT_ARGS=" -v"
+    GIT_PULL_ARGS=" -v"
+    GIT_CHECKOUT_ARGS=
 else
-    GIT_ARGS=" -q"
+    GIT_PULL_ARGS=" -q"
+    GIT_CHECKOUT_ARGS=" -q"
+fi
+if test -n "$COSMOS_DRY_RUN$COSMOS_DRY_TASKS"; then
+    dry_run=echo
+else
+    dry_run=
 fi
 
-if test -n "$COSMOS_DRY_RUN$COSMOS_DRY_TASKS"; then
-    test -z "$COSMOS_VERBOSE" || echo "$self: invoking (dry-run) git pull"
-    echo "cd \"$COSMOS_REPO\" && git checkout master && git pull$GIT_ARGS"
-else
-    test -z "$COSMOS_VERBOSE" || \
-	echo "$self: running task: cd \"$COSMOS_REPO\" && git checkout master && git pull$GIT_ARGS"
-    cd "$COSMOS_REPO" && git checkout master && git pull $GIT_ARGS
-fi
+test -z "$COSMOS_VERBOSE" || \
+    echo "$self: invoking git: cd \"$COSMOS_REPO\" && git checkout $GIT_CHECKOUT_ARGS master && git pull $GIT_PULL_ARGS"
+
+cd "$COSMOS_REPO" && \
+    $dry_run git checkout $GIT_CHECKOUT_ARGS master && \
+    $dry_run git pull $GIT_PULL_ARGS
