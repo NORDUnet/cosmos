@@ -30,8 +30,8 @@ if ! test -d "$COSMOS_REPO"; then
     exit 1
 fi
 
-if test -z "$COSMOS_REPO_MODEL"; then
-    echo "$self: error: model directory in repository not configured" 1>&2
-    echo "$self: Try to set COSMOS_REPO_MODEL in $COSMOS_CONF." 1>&2
+if test -z "$COSMOS_REPO_MODELS"; then
+    echo "$self: error: model sources in repository not configured" 1>&2
+    echo "$self: Try to set COSMOS_REPO_MODELS in $COSMOS_CONF." 1>&2
     exit 1
 fi

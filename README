@@ -45,18 +45,30 @@ The default place for the Cosmos repository is /var/cache/cosmos/repo.
 The path is specified in cosmos.conf by setting the COSMOS_REPO
 environment variable.
 
-Normally you use the same reopsitory for several machines, so you need
-to specify the path within the repository that should be used for the
+Normally you use the same repository for several machines, so you have
+to specify the paths within the repository that should be used for the
 machine you are configuring.  Set the environment variable
-COSMOS_REPO_MODEL in cosmos.conf to specify the path.  For example,
-the machine "someserver.example.org" would use:
+COSMOS_REPO_MODELS in cosmos.conf to specify a list of colon separated
+paths.  A list of paths is useful to aggregate scripts common to all
+or a group of systems while preserving the ability to have a
+per-server directory as well.
 
-  COSMOS_REPO_MODEL="$COSMOS_REPO/someserver.example.org"
+For example, the machine "someserver.example.org" could use a path
+where files for many systems are put, and a special path for that
+system only.
 
-The cosmos repository is updated (e.g., git pull) by running 'cosmos
-update'.  That command will also copy the files from COSMOS_REPO_MODEL
-into the path used by Cosmos to actually perform its work, the Cosmos
-"model".
+  COSMOS_REPO_MODELS="$COSMOS_REPO/someserver.example.org:$COSMOS_REPO/global"
+
+When 'cosmos update' is invoked it will first update the repository
+(e.g., 'git pull') and then recursively copy (using rsync) each of the
+paths in COSMOS_REPO_MODELS into the path used by Cosmos to perform
+its work, the Cosmos "model".
+
+NOTE: If you have files named the same in multiple COSMOS_REPO_MODELS
+directories, the file from the FIRST directory is the one that will be
+copied to the target directory.  For the example above, files in the
+"$COSMOS_REPO/someserver.example.org" directory takes precedence over
+the "$COSMOS_REPO/global" directory.
 
 The default place for the Cosmos "model" for your system is
 /var/cache/cosmos/model.  The path is specified in cosmos.conf by
