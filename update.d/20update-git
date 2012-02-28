@@ -32,14 +32,14 @@ else
     GIT_CHECKOUT_ARGS=" -q"
 fi
 if test -n "$COSMOS_DRY_RUN$COSMOS_DRY_TASKS"; then
-    dry_run=echo
+    dry=echo
 else
-    dry_run=
+    dry=
 fi
 
 test -z "$COSMOS_VERBOSE" || \
     echo "$self: invoking git: cd \"$COSMOS_REPO\" && git checkout $GIT_CHECKOUT_ARGS master && git pull $GIT_PULL_ARGS"
 
 cd "$COSMOS_REPO" && \
-    $dry_run git checkout $GIT_CHECKOUT_ARGS master && \
-    $dry_run git pull $GIT_PULL_ARGS
+    $dry git checkout $GIT_CHECKOUT_ARGS master && \
+    $dry git pull $GIT_PULL_ARGS

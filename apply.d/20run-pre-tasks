@@ -20,6 +20,11 @@ self=`basename $0`
 
 MODEL_PRE_TASKS=$COSMOS_MODEL/pre-tasks.d
 
+if ! test -d "$MODEL_PRE_TASKS"; then
+    test -z "$COSMOS_VERBOSE" || echo "$self: pre-tasks is a no-op"
+    exit 0
+fi
+
 parts=$(echo `find -L $MODEL_PRE_TASKS/ -mindepth 1 -maxdepth 1 \
     -type f -name '[0-9]*' -executable \! -name \*~ | sort`)
 

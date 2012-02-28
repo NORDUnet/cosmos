@@ -20,6 +20,11 @@ self=`basename $0`
 
 MODEL_POST_TASKS=$COSMOS_MODEL/post-tasks.d
 
+if ! test -d "$MODEL_POST_TASKS"; then
+    test -z "$COSMOS_VERBOSE" || echo "$self: post-tasks is a no-op"
+    exit 0
+fi
+
 parts=$(echo `find -L $MODEL_POST_TASKS/ -mindepth 1 -maxdepth 1 \
     -type f -name '[0-9]*' -executable \! -name \*~ | sort`)
 

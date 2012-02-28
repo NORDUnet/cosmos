@@ -62,9 +62,9 @@ else
     GIT_CHECKOUT_ARGS=" -q"
 fi
 if test -n "$COSMOS_DRY_RUN$COSMOS_DRY_TASKS"; then
-    dry_run=echo
+    dry=echo
 else
-    dry_run=
+    dry=
 fi
 
 test -z "$COSMOS_VERBOSE" || \
@@ -77,9 +77,9 @@ test -z "$COSMOS_VERBOSE" || \
 # output.
 
 cd $COSMOS_REPO && \
-    $dry_run git checkout $GIT_CHECKOUT_ARGS $tag && (
+    $dry git checkout $GIT_CHECKOUT_ARGS $tag && (
     if test -n "$COSMOS_VERBOSE"; then
-	$dry_run git tag -v $tag
+	$dry git tag -v $tag
     elif test -n "$COSMOS_DRY_RUN$COSMOS_DRY_TASKS"; then
 	echo 'git tag -v $tag > /dev/null 2>&1'
     else

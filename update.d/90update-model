@@ -25,9 +25,9 @@ if test -n "$COSMOS_DRY_TASKS"; then
     RSYNC_ARGS="$RSYNC_ARGS --dry-run"
 fi
 if test -n "$COSMOS_DRY_RUN"; then
-    dry_run=echo
+    dry=echo
 else
-    dry_run=
+    dry=
 fi
 
 RSYNC_CMD="rsync$RSYNC_ARGS --archive --delete"
@@ -45,4 +45,4 @@ IFS=$oIFS
 test -z "$COSMOS_VERBOSE" \
     || echo "$self: invoking $RSYNC $@ \"$COSMOS_MODEL\""
 
-$dry_run $RSYNC "$@" "$COSMOS_MODEL"
+$dry $RSYNC "$@" "$COSMOS_MODEL"

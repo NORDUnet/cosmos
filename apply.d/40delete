@@ -18,22 +18,26 @@
 set -e
 self=`basename $0`
 
-if ! test -d "$COSMOS_MODEL/delete"; then
+MODEL_DELETE=$COSMOS_MODEL/delete
+
+if ! test -d "$MODEL_DELETE"; then
     test -z "$COSMOS_VERBOSE" || echo "$self: delete is a no-op"
     exit 0
 fi
 
+if test -n "$COSMOS_DRY_RUN$COSMOS_DRY_TASKS"; then
+    dry=echo
+else
+    dry=
+fi
+
 # FIXME: How to do -print0 loop without relying on non-POSIX read -d?
 
-cd "$COSMOS_MODEL/delete" && find . -type f -print0 | (
+cd "$MODEL_DELETE" && find . -type f -print0 | (
     while IFS= read -r -d $'\0' file; do
 	if test -f "$COSMOS_ROOT"/"$file"; then
 	    test -z "$COSMOS_VERBOSE" || echo "$self: Removing '$file'"
-	    if test -n "$COSMOS_DRY_RUN$COSMOS_DRY_TASKS"; then
-		echo "rm -f \"$COSMOS_ROOT\"/\"$file\""
-	    else
-		rm -f "$COSMOS_ROOT"/"$file"
-	    fi
+	    $dry rm -f "$COSMOS_ROOT"/"$file"
 	fi
     done
 )
