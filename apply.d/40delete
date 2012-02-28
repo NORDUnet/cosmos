@@ -20,7 +20,8 @@ self=`basename $0`
 
 # FIXME: How to do -print0 loop without relying on non-POSIX read -d?
 
-cd "$COSMOS_MODEL/delete" && find . -type f -print0 | (
+test -d "$COSMOS_MODEL/delete" && cd "$COSMOS_MODEL/delete" \
+    && find . -type f -print0 | (
     while IFS= read -r -d $'\0' file; do
 	if test -f "$COSMOS_ROOT"/"$file"; then
 	    test -z "$COSMOS_VERBOSE" || echo "$self: Removing '$file'"
