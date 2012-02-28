@@ -34,10 +34,3 @@ if ! test -d "$COSMOS_MODEL"; then
     echo "$self: error: model directory $COSMOS_MODEL does not exist" 1>&2
     exit 1
 fi
-
-for d in overlay delete pre-tasks.d post-tasks.d; do
-    if ! test -d "$COSMOS_MODEL/$d"; then
-	echo "$self: error: no such directory $COSMOS_MODEL/$d" 1>&2
-	exit 1
-    fi
-done
