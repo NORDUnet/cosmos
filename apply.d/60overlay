@@ -20,6 +20,10 @@ self=`basename $0`
 
 MODEL_OVERLAY="$COSMOS_MODEL/overlay"
 
+if ! test -d $MODEL_OVERLAY; then
+    exit 0
+fi
+
 if test -n "$COSMOS_VERBOSE"; then
     RSYNC_ARGS="$RSYNC_ARGS -v"
 fi
