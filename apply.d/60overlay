@@ -21,6 +21,7 @@ self=`basename $0`
 MODEL_OVERLAY="$COSMOS_MODEL/overlay"
 
 if ! test -d $MODEL_OVERLAY; then
+    test -z "$COSMOS_VERBOSE" || echo "$self: overlay is a no-op"
     exit 0
 fi
 
