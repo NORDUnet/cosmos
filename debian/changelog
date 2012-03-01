@@ -1,6 +1,6 @@
-cosmos (1.0-3) yubico; urgency=low
+cosmos (1.1-1) yubico; urgency=low
 
-  * Bump rebuild.
+  * New upstream release.
 
  -- Simon Josefsson <simon@josefsson.org>  Thu, 01 Mar 2012 09:44:11 +0100
 
