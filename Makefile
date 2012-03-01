@@ -87,11 +87,9 @@ distcheck: dist
 	make -C cosmos-$(VERSION) check
 	rm -rf cosmos-$(VERSION)
 
-bootstrap:
-	@if test -z $$HOST; then \
-		echo error: HOST unset; \
-		echo "Try 'make bootstrap HOST=12.34.56.78'"; \
-		exit 1; \
-	fi
-	make install DESTDIR=tmp
-	rsync -av tmp/ root@$$HOST:/
+KEYID=2117364A
+
+release: distcheck
+	gpg --detach-sign --default-key $(KEYID) cosmos-$(VERSION).tar.gz
+	gpg --verify cosmos-$(VERSION).tar.gz.sig
+	cp cosmos-$(VERSION).tar.gz cosmos-$(VERSION).tar.gz.sig ../releases/cosmos/
