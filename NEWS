@@ -1,4 +1,4 @@
-Version 1.2 unreleased
+Version 1.2 released 2012-03-05
 
 * Drop debian/ sub-directory.  Some cleanups for dpkg building.
 Debian packaging split off to its own repository, see
