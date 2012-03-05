@@ -90,7 +90,7 @@ distcheck: dist
 	make -C cosmos-$(VERSION) check
 	rm -rf cosmos-$(VERSION)
 
-KEYID=2117364A
+KEYID=B565716F
 
 release: distcheck
 	head -1 NEWS | grep "^Version $(VERSION) released"
