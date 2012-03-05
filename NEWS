@@ -1,6 +1,8 @@
 Version 1.2 unreleased
 
 * Drop debian/ sub-directory.  Some cleanups for dpkg building.
+Debian packaging split off to its own repository, see
+<https://gitorious.org/cosmos/cosmos-dpkg>.
 
 Version 1.1 released 2012-03-01
 
