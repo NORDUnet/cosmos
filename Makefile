@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-VERSION=1.1
+VERSION=1.2
 
 DESTDIR?=
 prefix=/usr
@@ -53,7 +53,7 @@ distclean:
 
 check:
 	grep "^cosmos (Cosmos)" cosmos | grep -q "^cosmos (Cosmos) $(VERSION)$$"
-	head -1 NEWS | grep "^Version $(VERSION) released"
+	head -1 NEWS | grep "^Version $(VERSION) "
 	checkbashisms --posix --extra cosmos `ls apply.d/* | grep -v 40delete` clone.d/* update.d/* gpg.d/*
 	rm -rf tst tst2
 	mkdir -p tst2 tst/etc/cosmos tst/var/cache/cosmos/overlay tst/var/cache/cosmos/delete tst/var/cache/cosmos/pre-tasks.d tst/var/cache/cosmos/post-tasks.d
@@ -89,6 +89,7 @@ distcheck: dist
 KEYID=2117364A
 
 release: distcheck
+	head -1 NEWS | grep "^Version $(VERSION) released"
 	gpg --detach-sign --default-key $(KEYID) cosmos-$(VERSION).tar.gz
 	gpg --verify cosmos-$(VERSION).tar.gz.sig
 	cp cosmos-$(VERSION).tar.gz cosmos-$(VERSION).tar.gz.sig ../releases/cosmos/
