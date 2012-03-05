@@ -48,7 +48,7 @@ install: all
 		$(INSTALL_EXE) $$f $(DESTDIR)$(etcdir)/cosmos/$$f; \
 	done
 
-clean:
+distclean:
 	rm -f cosmos.1
 
 check:
