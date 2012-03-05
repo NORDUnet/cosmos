@@ -53,7 +53,6 @@ clean:
 
 check:
 	grep "^cosmos (Cosmos)" cosmos | grep -q "^cosmos (Cosmos) $(VERSION)$$"
-	head -1 debian/changelog | grep "^cosmos ($(VERSION)-"
 	head -1 NEWS | grep "^Version $(VERSION) released"
 	checkbashisms --posix --extra cosmos `ls apply.d/* | grep -v 40delete` clone.d/* update.d/* gpg.d/*
 	rm -rf tst tst2
@@ -76,7 +75,7 @@ check:
 dist: all
 	rm -rf cosmos-$(VERSION)
 	mkdir cosmos-$(VERSION)
-	cp -r debian COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf cosmos.1 apply.d clone.d update.d gpg.d cosmos-$(VERSION)/
+	cp -r COPYING AUTHORS NEWS Makefile README cosmos cosmos.conf cosmos.1 apply.d clone.d update.d gpg.d cosmos-$(VERSION)/
 	tar cfz cosmos-$(VERSION).tar.gz cosmos-$(VERSION)
 	rm -rf cosmos-$(VERSION)
 
