@@ -51,6 +51,8 @@ install: all
 clean:
 
 distclean:
+
+maintainerclean:
 	rm -f cosmos.1
 
 check:
