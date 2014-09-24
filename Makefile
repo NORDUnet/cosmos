@@ -88,10 +88,8 @@ distcheck: dist
 	make -C cosmos-$(VERSION) check
 	rm -rf cosmos-$(VERSION)
 
-KEYID=B565716F
-
 release: distcheck
 	head -1 NEWS | grep "^Version $(VERSION) released"
-	gpg --detach-sign --default-key $(KEYID) cosmos-$(VERSION).tar.gz
+	gpg --detach-sign cosmos-$(VERSION).tar.gz
 	gpg --verify cosmos-$(VERSION).tar.gz.sig
 	cp cosmos-$(VERSION).tar.gz cosmos-$(VERSION).tar.gz.sig ../releases/cosmos/
