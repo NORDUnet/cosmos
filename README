@@ -30,7 +30,7 @@ system administration tools.  Cosmos requires a POSIX shell and rsync.
 A version control system with a strong security model (e.g., git using
 GnuPG to sign tags) is recommended for standard usage.  The version
 controlled repository hold the Cosmos "model" for a set of machines.
-The repository is usually centralized, and Cosmos help you fetch and
+The repository is usually centralized, and Cosmos helps you fetch and
 verify the integrity and authenticity (using GnuPG) before using files
 from it.
 
