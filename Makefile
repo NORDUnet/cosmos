@@ -16,10 +16,14 @@
 VERSION=1.5
 
 DESTDIR?=
-prefix=/usr
+prefix?=/usr
 bindir=${prefix}/bin
-etcdir=/etc
 mandir=${prefix}/share/man
+ifeq (${prefix},/usr)
+etcdir=/etc
+else
+etcdir=${prefix}/etc
+endif
 
 INSTALL=install
 INSTALL_EXE=$(INSTALL) -D --mode 755
