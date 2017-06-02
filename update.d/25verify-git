@@ -20,13 +20,13 @@ self=`basename $0`
 
 if ! test -d "$COSMOS_REPO/.git"; then
     test -z "$COSMOS_VERBOSE" || \
-	echo "$self: ignoring non-git repository: $COSMOS_REPO" 1>&2
+  echo "$self: ignoring non-git repository: $COSMOS_REPO" 1>&2
     exit 0
 fi
 
 if test -z "$COSMOS_UPDATE_VERIFY"; then
     test -z "$COSMOS_VERBOSE" \
-	|| echo "$self: not asked to verify, ignoring" 1>&2
+  || echo "$self: not asked to verify, ignoring" 1>&2
     exit 0
 fi
 
@@ -79,11 +79,11 @@ test -z "$COSMOS_VERBOSE" || \
 cd $COSMOS_REPO && \
     $dry git checkout $GIT_CHECKOUT_ARGS $tag && (
     if test -n "$COSMOS_VERBOSE"; then
-	$dry git tag -v $tag
+  $dry git tag -v $tag
     elif test -n "$COSMOS_DRY_RUN$COSMOS_DRY_TASKS"; then
-	echo 'git tag -v $tag > /dev/null 2>&1'
+  echo 'git tag -v $tag > /dev/null 2>&1'
     else
-	git tag -v $tag > /dev/null 2>&1
+  git tag -v $tag > /dev/null 2>&1
     fi
 )
 
