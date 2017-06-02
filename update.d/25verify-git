@@ -46,7 +46,7 @@ if test -z "$COSMOS_UPDATE_VERIFY_GIT_TAG_PATTERN"; then
 fi
 
 tag=$(cd $COSMOS_REPO && 
-    git tag -l "$COSMOS_UPDATE_VERIFY_GIT_TAG_PATTERN" | sort | tail -1)
+    git tag "$COSMOS_GIT_TAG_EXTRA_FLAGS" -l "$COSMOS_UPDATE_VERIFY_GIT_TAG_PATTERN" | sort | tail -1)
 
 if test -z "$tag"; then
     echo "$self: error: no git tags found matching pattern: $COSMOS_UPDATE_VERIFY_GIT_TAG_PATTERN" 1>&2
