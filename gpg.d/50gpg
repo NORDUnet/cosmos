@@ -33,7 +33,7 @@ if test -n "$COSMOS_DRY_RUN"; then
     echo "$COSMOS_GPG_COMMAND" "$@"
 elif test -n "$COSMOS_DRY_TASKS"; then
     test -z "$COSMOS_VERBOSE" || \
-	echo "$self: invoking (dry-tasks) gpg --dry-run $@"
+  echo "$self: invoking (dry-tasks) gpg --dry-run $@"
     $COSMOS_GPG_COMMAND --dry-run "$@"
 else
     test -z "$COSMOS_VERBOSE" || echo "$self: invoking gpg $@"
