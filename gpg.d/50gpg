@@ -21,17 +21,21 @@ self=`basename $0`
 GNUPGHOME="$COSMOS_CONF_DIR/gnupg"
 export GNUPGHOME
 
+if [ -z "$COSMOS_GPG_COMMAND" ]; then
+  COSMOS_GPG_COMMAND=gpg
+fi
+
 if ! test -d "$GNUPGHOME"; then
     mkdir -m 700 "$GNUPGHOME"
 fi
 
 if test -n "$COSMOS_DRY_RUN"; then
-    echo "gpg $@"
+    echo "$COSMOS_GPG_COMMAND" "$@"
 elif test -n "$COSMOS_DRY_TASKS"; then
     test -z "$COSMOS_VERBOSE" || \
 	echo "$self: invoking (dry-tasks) gpg --dry-run $@"
-    gpg --dry-run "$@"
+    $COSMOS_GPG_COMMAND --dry-run "$@"
 else
     test -z "$COSMOS_VERBOSE" || echo "$self: invoking gpg $@"
-    gpg "$@"
+    $COSMOS_GPG_COMMAND "$@"
 fi
